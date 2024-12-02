@@ -18,26 +18,43 @@ export default function Predict() {
 
   return (
     <div>
-      <form className="flex flex-row justify-center" onSubmit={handleSubmit}>
-        <ParentCatProfile
-          parentID="A"
-        >
-        </ParentCatProfile>
-        {numParents === 2 ? 
+      <form className="flex flex-col justify-center items-center" onSubmit={handleSubmit}>
+        <div className="flex flex-row justify-center" >          
           <ParentCatProfile
-            parentID="B"
+            parentID="A"
           >
           </ParentCatProfile>
-          : ""
-        }
-        {numParents < 2 ? 
-          <AddButton
-            itemType="Parent"
-            onClick={handleClick}
+          {numParents === 2 ? 
+            <ParentCatProfile
+              parentID="B"
+            >
+            </ParentCatProfile>
+            : ""
+          }
+          {numParents < 2 ? 
+            <AddButton
+              itemType="Parent"
+              onClick={handleClick}
+            >
+            </AddButton> 
+            : ""
+          }
+        </div>
+        <div className="my-1">
+          <label
+            htmlFor="litterSize"
+          >Number of Kittens: </label>
+          <input
+            className="rounded-md bg-white/70 p-2"
+            type="number"
+            name="litterSize"
+            id="litterSize"
+            min={1}
+            max={10}
+            defaultValue={4}
           >
-          </AddButton> 
-          : ""
-        }
+          </input>
+        </div>
       </form>
     </div>
   )

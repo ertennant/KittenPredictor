@@ -110,10 +110,10 @@ export default function ParentCatProfile({parentID}: AppProps) {
       {
         traits.keys().toArray().filter(k => k !== "sex").map(k => 
           <CatDataItem 
+            key={k}
             catID={parentID}
             traitType={k}
             traitValue={traits.get(k) ?? ""}
-            // onChange={updateTraits}
             onDelete={removeTrait}
           >
           </CatDataItem>
