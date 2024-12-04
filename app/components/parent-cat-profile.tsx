@@ -27,8 +27,8 @@ export default function ParentCatProfile({parentID}: AppProps) {
   function updateTraits(event: any) {
     // event.preventDefault(); 
     // event.stopPropagation();
-    console.log(event);
-    console.log(`called updateTraits() for ${event.currentTarget.name}`);
+    // console.log(event);
+    // console.log(`called updateTraits() for ${event.currentTarget.name}`);
     let updated = new Map(traits); 
     let trait = event.currentTarget.name.slice(2);
     // dealt with separately because male/female can be set with a button, while the rest are set with text inputs 
@@ -44,7 +44,6 @@ export default function ParentCatProfile({parentID}: AppProps) {
       }
     }
     setTraits(updated);
-    console.log(traits);
   }
 
   function removeTrait(traitType: string) {
@@ -73,7 +72,6 @@ export default function ParentCatProfile({parentID}: AppProps) {
         temp.visible = false; 
         setNewTrait(temp);
         setTraits(updated);
-        console.log(updated);
         return; 
       }
     }
@@ -81,11 +79,12 @@ export default function ParentCatProfile({parentID}: AppProps) {
   }
 
   return (
-    <div className="rounded-md p-6 border flex flex-col items-stretch">
-      <div className={"rounded-md bg-white/70 p-2 my-2 text-xl"}>
+    <div className="rounded-2xl p-6 border bg-white/60 backdrop-blur-md flex flex-col items-stretch m-2">
+      <div className={"rounded-2xl bg-white/75 focus-within:bg-white/90 focus-within:bg-white border-2 border-slate-300 p-2 my-2 text-xl"}>
         <input
           type="text"
-          className="h-min bg-transparent"
+          name={parentID + "-name"}
+          className="h-min bg-transparent outline-0"
           value={name}
           placeholder="Enter Name"
           onChange={e => setName(e.currentTarget.value)}
@@ -121,7 +120,7 @@ export default function ParentCatProfile({parentID}: AppProps) {
       }
       <input
         type="text"
-        className={"rounded-md bg-white/70 p-2 my-2" + (!newTrait.visible ? " hidden" : "")}
+        className={"rounded-2xl bg-white/70 p-2 my-1 " + (!newTrait.visible ? " hidden" : "")}
         value={newTrait.value}
         placeholder="Enter New Trait"
         onChange={updateNewTrait}
