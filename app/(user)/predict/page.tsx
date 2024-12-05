@@ -21,6 +21,12 @@ export default function Predict() {
         bTraits.push(element.value);
       }
     }
+    // stop user from submitting empty parent cats
+    if (!event.currentTarget.elements["A-name"] || !event.currentTarget.elements["B-name"]
+        || aTraits.length === 0 || bTraits.length === 0) {
+      return; 
+    }
+    
     let a = new Cat(
       event.currentTarget.elements["A-name"].value, 
       event.currentTarget.elements["A-sex"].title, 

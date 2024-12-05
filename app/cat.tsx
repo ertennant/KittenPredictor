@@ -1,12 +1,13 @@
 
 type GeneProfile = {
   xy: string[],
-  orange: string[], // O, OO = orange; Oo = tortie; o, oo = not orange 
-  brown: string[], // BB, Bb, Bbl = black; bb, bbl = brown; blbl = cinnamon 
-  dilute: string[], // DD, Dd = not dilute, dd = dilute 
-  white: string[], // WW, Ww = white; ww = not white 
-  longhair: string[], // NN, Nn = short hair; nn = long hair 
+  orange: string[], // O, O/O = orange; O/o = tortie; o, o/o = not orange 
+  brown: string[], // B/B, B/b, B/bl = black; b/b, b/bl = brown; bl/bl = cinnamon 
+  dilute: string[], // D/D, D/d = not dilute, d/d = dilute 
+  white: string[], // W/W, W/w = white; w/w = not white 
+  longhair: string[], // N/N, N/n = short hair; n/n = long hair 
   agouti: string[]; // AA, Aa = tabby; aa = self (solid) 
+  colorpoint: string[]; // C/C, C/cs, C/cb = non-colorpoint; cs/cs = Siamese colorpoint; cb/cb = Burmese colorpoint; cb/cs = mink colorpoint 
   // note: rex and hairless are caused by several different breed-specific mutations that work separately 
   hairless?: string[], // for breed-specific hairless genes for Sphynx, etc. 
   rex?: string[], // for breed-specific rex (curly hair) genes for Cornish Rex, etc. 
@@ -53,12 +54,23 @@ const validCoatPatterns : { [key: string]: string; } = {
   "tabby": "tabby",
   "tuxedo": "tuxedo",
   "tuxie": "tuxedo",
+  "mink": "mink",
+  "tonkinese colorpoint": "mink",
+  "sepia": "sepia",
+  "burmese colorpoint": "sepia",
   "colorpoint": "colorpoint",
   "color point": "colorpoint",
   "colourpoint": "colorpoint",
   "colour point": "colorpoint",
   "pointed": "colorpoint",
 }
+
+// To Do: add more breeds
+const validBreeds : string[] = [
+  "siamese",
+  "burmese",
+  "tonkinese",
+]
 
 class Cat {
   name: string; 
@@ -99,6 +111,7 @@ class Cat {
       this.sex = validXYValues[b.toLowerCase()]; 
 
       if (c) {
+        console.log(c);
         for (let trait of c) {
           trait = trait.toLowerCase(); 
           if (trait in validColors) {
@@ -107,6 +120,8 @@ class Cat {
             this.coatType = validCoatTypes[trait];
           } else if (trait in validCoatPatterns && !this.coatPatterns.includes(trait)) {
             this.coatPatterns.push(trait);
+          } else if (validBreeds.includes(trait)) {
+            this.breed = trait; 
           }
         }
       }
@@ -119,6 +134,7 @@ class Cat {
         white: [],
         longhair: [],
         agouti: [],
+        colorpoint: [],
       }
       this.generateGenes();
     } else if (typeof a === "object" && typeof b === "object") {
@@ -134,6 +150,7 @@ class Cat {
         white: [],
         longhair: [],
         agouti: [], 
+        colorpoint: [], 
       }
 
       if (father.xy && mother.xy) {
@@ -161,10 +178,6 @@ class Cat {
 
       if (father.brown.length > 0 && mother.brown.length > 0) {
         this.genes.brown = father.brown.concat(mother.brown).sort(); 
-      }
-
-      if (father.agouti.length > 0 && mother.agouti.length > 0) {
-        this.genes.agouti = father.agouti.concat(mother.agouti).sort(); 
       }
 
       if (this.genes.white.includes("W")) {
@@ -214,9 +227,27 @@ class Cat {
         this.coatType = "longhair";
       } 
 
+      if (father.agouti.length > 0 && mother.agouti.length > 0) {
+        this.genes.agouti = father.agouti.concat(mother.agouti).sort(); 
+      }
+
       if (this.genes.agouti.includes("A")) {
         this.coatPatterns.push("tabby");
-      } 
+      }
+
+      if (father.colorpoint.length > 0 && mother.colorpoint.length > 0) {
+        this.genes.colorpoint = father.colorpoint.concat(mother.colorpoint).sort(); 
+      }
+
+      if (!this.genes.colorpoint.includes("C")) {
+        if (this.genes.colorpoint.includes("cs") && !this.genes.colorpoint.includes("cb")) {
+          this.coatPatterns.push("colorpoint");
+        } else if (this.genes.colorpoint.includes("cs") && this.genes.colorpoint.includes("cb")) {
+          this.coatPatterns.push("mink");
+        } else {
+          this.coatPatterns.push("sepia");
+        }
+      }
 
     } else {
       throw new Error("Error: cannot create Cat. Invalid arguments.");
@@ -284,6 +315,26 @@ class Cat {
     } else {
       this.genes.agouti = ["a", "a"];
     }
+
+    // Colorpoint Genes 
+    if (this.breed?.toLowerCase() === "siamese") {
+      this.genes.colorpoint = ["cs", "cs"];
+    } else if (this.coatPatterns.includes("colorpoint")) {
+      this.genes.colorpoint = ["cs", ["cs", "cb"][Math.floor(Math.random() * 2)]];
+    } else if (this.coatPatterns.includes("mink")) {
+      this.genes.colorpoint = ["cs", "cb"];
+    } else if (this.breed?.toLowerCase() === "tonkinese") {
+      // tonkinese can be cs/cs, cs/cb, or cb/cb 
+      // cs/cb x any can produce any of cs/cs, cs/cb, cb/cb
+      // cs/cs x anything != cb/cb 
+      // cb/cb x anything != cs/cs  
+      this.genes.colorpoint = [["cs", "cb"][Math.floor(Math.random() * 2)], ["cs", "cb"][Math.floor(Math.random() * 2)]];
+    } else if (this.breed?.toLowerCase() === "burmese" || this.coatPatterns.includes("sepia")) {
+      this.genes.colorpoint = ["cb", "cb"];
+    } else {
+      // for simplicity, this assumes that random adult cats without visible points aren't carriers 
+      this.genes.colorpoint = ["C", "C"];
+    }
   }
 
   // Retrieves the set of genes this parent will provide to a kitten. 
@@ -296,6 +347,7 @@ class Cat {
       white: [],
       longhair: [],
       agouti: [], 
+      colorpoint: [], 
     };
     for (let key of Object.keys(kittenGenes)) {
       let k = key as keyof GeneProfile; 

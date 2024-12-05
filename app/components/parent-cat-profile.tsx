@@ -8,8 +8,8 @@ const sampleTraits : Map<string, string[]> = new Map([
   ["coatType", ["shorthair", "mediumhair", "longhair", "rex", "hairless"]], 
   ["color", ["black", "brown", "chocolate", "cinnamon", "gray", "grey", "blue", "white", "orange", "red", "cream", "lilac", "fawn", "tortoiseshell", "calico"]], 
   ["tabby", ["tabby"]],
-  ["colorpoint", ["colorpoint"]],
-  ["breed", ["Persian", "Maine Coon", "Siberian", "Burmese", "Siamese", "Sphynx", "Devon Rex", "Turkish Van", "Russian Blue", "Manx", "Ragdoll", "Bengal"]], 
+  ["colorpoint", ["colorpoint", "mink", "sepia"]],
+  ["breed", ["Siamese", "Burmese", "Tonkinese"]], 
   ["misc", ["polydactyly", "heterochromia"]]
 ])
 
