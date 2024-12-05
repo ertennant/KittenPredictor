@@ -7,6 +7,8 @@ const sampleTraits : Map<string, string[]> = new Map([
   ["sex", ["XX", "XY"]], 
   ["coatType", ["shorthair", "mediumhair", "longhair", "rex", "hairless"]], 
   ["color", ["black", "brown", "chocolate", "cinnamon", "gray", "grey", "blue", "white", "orange", "red", "cream", "lilac", "fawn", "tortoiseshell", "calico"]], 
+  ["tabby", ["tabby"]],
+  ["colorpoint", ["colorpoint"]],
   ["breed", ["Persian", "Maine Coon", "Siberian", "Burmese", "Siamese", "Sphynx", "Devon Rex", "Turkish Van", "Russian Blue", "Manx", "Ragdoll", "Bengal"]], 
   ["misc", ["polydactyly", "heterochromia"]]
 ])
@@ -79,8 +81,8 @@ export default function ParentCatProfile({parentID}: AppProps) {
   }
 
   return (
-    <div className="rounded-2xl p-6 border bg-white/60 backdrop-blur-md flex flex-col items-stretch m-2">
-      <div className={"rounded-2xl bg-white/75 focus-within:bg-white/90 focus-within:bg-white border-2 border-slate-300 p-2 my-2 text-xl"}>
+    <div className="rounded-2xl p-6 border border-white bg-white/70 backdrop-blur-md flex flex-col items-stretch m-2">
+      <div className={"rounded-2xl bg-white/20 focus-within:bg-white focus-within:bg-white hover:bg-white border-2 border-emerald-400 p-2 my-2 text-xl"}>
         <input
           type="text"
           name={parentID + "-name"}
@@ -107,7 +109,7 @@ export default function ParentCatProfile({parentID}: AppProps) {
         </button>
       </div>
       {
-        traits.keys().toArray().filter(k => k !== "sex").map(k => 
+        Array.from(traits.keys()).filter(k => k !== "sex").map(k => 
           <CatDataItem 
             key={k}
             catID={parentID}

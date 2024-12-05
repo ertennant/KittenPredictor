@@ -7,24 +7,29 @@ import Cat from '@/app/cat';
 
 import { Dispatch, SetStateAction, useState } from 'react';
 export default function Predict() {
-  const [father, setFather] = useState(new Cat("Father", "XY"));  
-  const [mother, setMother] = useState(new Cat("Mother", "XX"));  
   const [kittens, setKittens] = useState<Cat[]>([]);
   
   function handleSubmit(event: any) {
     event.preventDefault(); 
     // console.log(event);
+    let aTraits : string[] = []; 
+    let bTraits : string[]  = []; 
+    for (let element of event.currentTarget.elements) {
+      if (element.id.includes("A-trait")) {
+        aTraits.push(element.value);
+      } else if (element.id.includes("B-trait")) {
+        bTraits.push(element.value);
+      }
+    }
     let a = new Cat(
       event.currentTarget.elements["A-name"].value, 
       event.currentTarget.elements["A-sex"].title, 
-      event.currentTarget.elements["A-color"]?.value ?? "", 
-      event.currentTarget.elements["A-coatType"]?.value ?? "", 
+      aTraits
     )
     let b = new Cat(
       event.currentTarget.elements["B-name"].value, 
       event.currentTarget.elements["B-sex"].title, 
-      event.currentTarget.elements["B-color"].value, 
-      event.currentTarget.elements["B-coatType"].value, 
+      bTraits
     )
     let newKittens : Cat[] = []; 
     for (let i = 0; i < parseInt(event.currentTarget.litterSize.value); i++) {
@@ -63,7 +68,7 @@ export default function Predict() {
             </input>
           </div>
           <input
-            className="rounded-md bg-white/70 p-2"
+            className="rounded-2xl p-2 cursor-pointer bg-accent hover:bg-accent-light active:shadow-inner hover:shadow-glow-sm"
             type="submit"
             value="Generate Kittens"
           >

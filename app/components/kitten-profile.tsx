@@ -8,6 +8,7 @@ type KittenProfileProps = {
 }
 
 export default function KittenProfile({cat}: KittenProfileProps) {
+  console.log(cat);
   return (
     <div className="flex flex-col items-center m-2">      
       <div className="rounded-2xl p-6 border bg-white/60 backdrop-blur-md flex flex-col items-stretch">
@@ -35,25 +36,36 @@ export default function KittenProfile({cat}: KittenProfileProps) {
           </button>
         </div>
         {cat.color !== "unknown" ? 
-          <input
-              type="text"
-              className="rounded-2xl bg-white/70 p-2 my-2"
-              value={cat.color}
-              readOnly={true}
+          <CatDataItem 
+            key={cat.color}
+            catID={cat.name}
+            traitType={"color"}
+            traitValue={cat.color}
+            readOnly={true}
           >
-          </input>
+          </CatDataItem>
           : ""
         }
         {cat.coatType !== "unknown" ? 
-          <input
-              type="text"
-              className="rounded-2xl bg-white/70 p-2 my-2"
-              value={cat.coatType}
-              readOnly={true}
+          <CatDataItem
+            readOnly={true}
+            catID={cat.name}
+            traitType="coatType"
+            traitValue={cat.coatType}
           >
-          </input>
+          </CatDataItem>
           : ""
         }
+        {Array.from(Object.values(cat.coatPatterns)).map(e => 
+          <CatDataItem 
+            key={e}
+            catID={cat.name}
+            traitType={"coatPattern"}
+            traitValue={e}
+            readOnly={true}
+          >
+          </CatDataItem>
+        )}
       </div>
     </div>
   )

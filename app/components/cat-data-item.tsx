@@ -17,9 +17,9 @@ export default function CatDataItem({readOnly, catID, traitType, traitValue, onD
     <div className="rounded-2xl bg-white/70 p-2 my-1 relative">
       <input 
         type="text" 
-        className="bg-transparent outline-none cursor-default"
-        id={catID + '-' + traitType} 
-        name={catID + '-' + traitType} 
+        className="bg-transparent outline-none cursor-default w-full text-center"
+        id={catID + '-trait-' + traitValue} 
+        name={catID + '-trait-' + traitValue} 
         value={traitValue}
         readOnly
         placeholder={"Enter " + traitType.charAt(0).toUpperCase() + traitType.slice(1)}

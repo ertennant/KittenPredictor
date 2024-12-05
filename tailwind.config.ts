@@ -11,7 +11,12 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        accent: "var(--accent)",
+        'accent-light': "var(--accent-light)",
       },
+    },
+    boxShadow: {
+      'glow-sm': '0 0 20px 15px rgba(255, 255, 255, 0.5)',
     },
   },
   plugins: [],

@@ -6,9 +6,11 @@ type GeneProfile = {
   dilute: string[], // DD, Dd = not dilute, dd = dilute 
   white: string[], // WW, Ww = white; ww = not white 
   longhair: string[], // NN, Nn = short hair; nn = long hair 
-  // note: rex and hairless are caused by several different mutations that work separately 
+  agouti: string[]; // AA, Aa = tabby; aa = self (solid) 
+  // note: rex and hairless are caused by several different breed-specific mutations that work separately 
+  hairless?: string[], // for breed-specific hairless genes for Sphynx, etc. 
+  rex?: string[], // for breed-specific rex (curly hair) genes for Cornish Rex, etc. 
 }
-
 
 const validXYValues : { [key: string]: string; } = {
   "xy": "XY", 
@@ -38,19 +40,51 @@ const validColors : { [key: string]: string; } = {
   "fawn": "fawn", 
 }
 
+const validCoatTypes : { [key: string]: string; } = {
+  "longhair": "longhair", 
+  "long hair": "longhair", 
+  "long": "longhair", 
+  "shorthair": "shorthair", 
+  "short hair": "shorthair", 
+  "short": "shorthair", 
+}
+
+const validCoatPatterns : { [key: string]: string; } = {
+  "tabby": "tabby",
+  "tuxedo": "tuxedo",
+  "tuxie": "tuxedo",
+  "colorpoint": "colorpoint",
+  "color point": "colorpoint",
+  "colourpoint": "colorpoint",
+  "colour point": "colorpoint",
+  "pointed": "colorpoint",
+}
+
 class Cat {
   name: string; 
   sex: string; // XX, XY
-  color?: string; // black, orange, tortoiseshell, gray, chocolate, cinnamon, cream,... 
-  coatType?: string; // short hair, medium hair, long hair, rex, hairless 
-  coatPattern?: string; // tabby, tuxedo, etc. 
+  color: string; // black, orange, tortoiseshell, gray, chocolate, cinnamon, cream,... 
+  coatType: string; // short hair, long hair, rex, hairless 
+  coatPatterns: string[]; // tabby, tuxedo, etc.
   breed?: string; 
   genes: GeneProfile; 
   
+  constructor(name: string, sex: string, traits?: string[]);
   constructor(father: GeneProfile, mother: GeneProfile);
-  constructor(name: string, sex: string, color?: string, coatType?: string, coatPattern?: string, breed?: string); 
-  constructor(a: string | GeneProfile, b: string | GeneProfile, color?: string, coatType?: string, coatPattern?: string, breed?: string) 
+  constructor(a: string | GeneProfile, b: string | GeneProfile, c?: string[]) 
   {
+
+  // constructor(name: string, sex: string, color?: string, coatType?: string, coatPattern?: string, breed?: string); 
+  // constructor(a: string | GeneProfile, b: string | GeneProfile, color?: string, coatType?: string, coatPattern?: string, breed?: string) 
+  // {
+    this.name = "Cat";
+    this.sex = "unknown";
+    this.color = "unknown";
+    this.coatType = "unknown";
+    this.coatPatterns = [];
+    this.breed = "unknown";
+
+
     if (typeof a === "string" && typeof b === "string") {
       
       if (a === "") {
@@ -61,16 +95,22 @@ class Cat {
         throw new Error(`Error: cannot create Cat ${a} because XY value ${b} is invalid.`);
       }
 
-      if (color && !Object.keys(validColors).includes(color)) {
-        throw new Error("Error: cannot create Cat because color value is invalid.");
-      }
-
       this.name = a; 
       this.sex = validXYValues[b.toLowerCase()]; 
-      this.color = color ? validColors[color.toLowerCase()] : "unknown"; 
-      this.coatType = coatType?.toLowerCase() ?? "unknown"; 
-      this.coatPattern = coatPattern?.toLowerCase() ?? "unknown"; 
-      this.breed = breed?.toLowerCase() ?? "unknown";
+
+      if (c) {
+        for (let trait of c) {
+          trait = trait.toLowerCase(); 
+          if (trait in validColors) {
+            this.color = validColors[trait];
+          } else if (trait in validCoatTypes) {
+            this.coatType = validCoatTypes[trait];
+          } else if (trait in validCoatPatterns && !this.coatPatterns.includes(trait)) {
+            this.coatPatterns.push(trait);
+          }
+        }
+      }
+
       this.genes = {
         xy: [],
         orange: [], 
@@ -78,6 +118,7 @@ class Cat {
         dilute: [],
         white: [],
         longhair: [],
+        agouti: [],
       }
       this.generateGenes();
     } else if (typeof a === "object" && typeof b === "object") {
@@ -92,6 +133,7 @@ class Cat {
         dilute: [],
         white: [],
         longhair: [],
+        agouti: [], 
       }
 
       if (father.xy && mother.xy) {
@@ -119,6 +161,10 @@ class Cat {
 
       if (father.brown.length > 0 && mother.brown.length > 0) {
         this.genes.brown = father.brown.concat(mother.brown).sort(); 
+      }
+
+      if (father.agouti.length > 0 && mother.agouti.length > 0) {
+        this.genes.agouti = father.agouti.concat(mother.agouti).sort(); 
       }
 
       if (this.genes.white.includes("W")) {
@@ -167,6 +213,11 @@ class Cat {
       } else if (this.genes.longhair.length > 0) {
         this.coatType = "longhair";
       } 
+
+      if (this.genes.agouti.includes("A")) {
+        this.coatPatterns.push("tabby");
+      } 
+
     } else {
       throw new Error("Error: cannot create Cat. Invalid arguments.");
     }
@@ -185,7 +236,7 @@ class Cat {
       this.genes.xy = ["X", "Y"];
     }
 
-    if (this.color) {
+    if (this.color !== "unknown") {
       // orange is on the X chromosome, so male cats have only one copy, while female cats have two 
       if (["orange", "cream"].includes(this.color)) {
         if (this.sex === "XY") {
@@ -219,15 +270,23 @@ class Cat {
       }
     }
 
-    if (this.coatType) {
+    if (this.coatType !== "unknown") {
       if (this.coatType === "longhair") {
         this.genes.longhair = ["n", "n"];
       } else if (this.coatType === "shorthair") {
         this.genes.longhair = ["N", ["N", "n"][Math.floor(Math.random() * 2)]];
       }
     }
+    
+    // To Do: deal with coat patterns and breed-specific hair types. 
+    if (this.coatPatterns.includes("tabby")) {
+      this.genes.agouti = ["A", ["A", "a"][Math.floor(Math.random() * 2)]];
+    } else {
+      this.genes.agouti = ["a", "a"];
+    }
   }
 
+  // Retrieves the set of genes this parent will provide to a kitten. 
   getKittenGenes(): GeneProfile {
     let kittenGenes : GeneProfile = {
       xy: [],
@@ -236,17 +295,20 @@ class Cat {
       dilute: [],
       white: [],
       longhair: [],
+      agouti: [], 
     };
     for (let key of Object.keys(kittenGenes)) {
       let k = key as keyof GeneProfile; 
-      if (this.genes[k].length > 0) {
+      if (this.genes[k] && this.genes[k].length > 0) {
         // choose one of the available alleles at random 
+        kittenGenes[k] = []; 
         kittenGenes[k].push(this.genes[k][Math.floor(Math.random() * this.genes[k].length)])
       }
     }
     return kittenGenes;
   }
 
+  // Given another Cat, produces a kitten with genes from each parent. 
   makeKittenWith(mate: Cat, kittenName?: string): Cat {
     let dad; 
     let mom; 
