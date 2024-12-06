@@ -35,6 +35,17 @@ export default function KittenProfile({cat}: KittenProfileProps) {
             </Image>
           </button>
         </div>
+        {cat.breed && cat.breed !== "unknown" ? 
+          <CatDataItem 
+            key={cat.breed}
+            catID={cat.name}
+            traitType={"breed"}
+            traitValue={cat.breed}
+            readOnly={true}
+          >
+          </CatDataItem>
+          : ""
+        }
         {cat.color !== "unknown" ? 
           <CatDataItem 
             key={cat.color}

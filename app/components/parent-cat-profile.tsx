@@ -3,15 +3,18 @@ import { SetStateAction, useState } from "react";
 import Image from "next/image";
 import CatDataItem from "./cat-data-item";
 
-const sampleTraits : Map<string, string[]> = new Map([
-  ["sex", ["XX", "XY"]], 
-  ["coatType", ["shorthair", "mediumhair", "longhair", "rex", "hairless"]], 
-  ["color", ["black", "brown", "chocolate", "cinnamon", "gray", "grey", "blue", "white", "orange", "red", "cream", "lilac", "fawn", "tortoiseshell", "calico"]], 
-  ["tabby", ["tabby"]],
-  ["colorpoint", ["colorpoint", "mink", "sepia"]],
-  ["breed", ["Siamese", "Burmese", "Tonkinese"]], 
-  ["misc", ["polydactyly", "heterochromia"]]
-])
+import { validColors, validCoatPatterns, validCoatTypes, validBreeds } from "../cat-data-defs";
+
+// const sampleTraits : Map<string, string[]> = new Map([
+//   ["sex", ["XX", "XY"]], 
+//   ["coatType", ["shorthair", "mediumhair", "longhair", "rex", "hairless"]], 
+//   ["color", ["black", "brown", "chocolate", "cinnamon", "gray", "grey", "blue", "white", "orange", "red", "cream", "lilac", "fawn", "tortoiseshell", "calico"]], 
+//   ["tabby", ["tabby"]],
+//   ["bicolor", ["bicolor", "bicolour", "tuxedo", "tuxie"]],
+//   ["colorpoint", ["colorpoint", "mink", "sepia"]],
+//   ["breed", ["Siamese", "Burmese", "Tonkinese", "Sphynx", "Devon Rex"]], 
+//   ["misc", ["polydactyly", "heterochromia"]]
+// ])
 
 type AppProps = {
   parentID: string 
@@ -32,7 +35,7 @@ export default function ParentCatProfile({parentID}: AppProps) {
     // console.log(event);
     // console.log(`called updateTraits() for ${event.currentTarget.name}`);
     let updated = new Map(traits); 
-    let trait = event.currentTarget.name.slice(2);
+    let trait = event.currentTarget.name.slice(2).toLowerCase();
     // dealt with separately because male/female can be set with a button, while the rest are set with text inputs 
     if (trait === "sex") {
       if (updated.get("sex") === "XX") {
@@ -41,9 +44,24 @@ export default function ParentCatProfile({parentID}: AppProps) {
         updated.set("sex", "XX");
       }
     } else {
-      if (sampleTraits.has(trait)) {
+      if (trait in validColors) {
+        updated.set(validColors[trait], event.currentTarget.value);
+      }
+      if (trait in validCoatPatterns) { 
+        // Don't change colors and coatPatterns to an if/else, because calico maps to both calico color and bicolor pattern (calico = tortie + bicolor)
+        updated.set(validCoatPatterns[trait], event.currentTarget.value);
+      }
+      if (trait in validCoatTypes) { 
+        updated.set(validCoatTypes[trait], event.currentTarget.value);
+      }
+      if (validBreeds.includes(trait)) { 
+        // For now, validBreeds is an array and not an object, so you can't use in.
         updated.set(trait, event.currentTarget.value);
       }
+
+      // if (sampleTraits.has(trait)) {
+      //   updated.set(trait, event.currentTarget.value);
+      // }
     }
     setTraits(updated);
   }
@@ -64,19 +82,44 @@ export default function ParentCatProfile({parentID}: AppProps) {
   }
 
   function updateNewTrait(event: any): void {
+    let updated = new Map(traits);
     let temp = {...newTrait};
-    temp.value = event.currentTarget.value; 
-    for (const key of sampleTraits.keys()) {
-      if (sampleTraits.get(key)?.includes(temp.value)) {
-        let updated = new Map(traits);
-        updated.set(key, temp.value);
-        temp.value = "";
-        temp.visible = false; 
-        setNewTrait(temp);
-        setTraits(updated);
-        return; 
-      }
+    let found = false; 
+    temp.value = event.currentTarget.value.toLowerCase(); 
+    if (temp.value in validColors) {
+      found = true; 
+      updated.set("color", temp.value);
     }
+    if (temp.value in validCoatPatterns) {
+      found = true; 
+      updated.set(temp.value, temp.value);
+    }
+    if (temp.value in validCoatTypes) {
+      found = true; 
+      updated.set("coatType", temp.value);
+    }
+    if (validBreeds.includes(temp.value)) {
+      found = true; 
+      updated.set("breed", temp.value);
+    }
+    if (found) {
+      temp.value = "";
+      temp.visible = false; 
+      setNewTrait(temp);
+      setTraits(updated);
+      return; 
+    }
+    // for (const key of sampleTraits.keys()) {
+    //   if (sampleTraits.get(key)?.includes(temp.value)) {
+    //     let updated = new Map(traits);
+    //     updated.set(key, temp.value);
+    //     temp.value = "";
+    //     temp.visible = false; 
+    //     setNewTrait(temp);
+    //     setTraits(updated);
+    //     return; 
+    //   }
+    // }
     setNewTrait(temp);
   }
 

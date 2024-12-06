@@ -2,7 +2,6 @@
 
 import ParentCatProfile from '@/app/components/parent-cat-profile';
 import KittenProfile from '@/app/components/kitten-profile';
-import AddButton from '@/app/components/add-button';
 import Cat from '@/app/cat';
 
 import { Dispatch, SetStateAction, useState } from 'react';
