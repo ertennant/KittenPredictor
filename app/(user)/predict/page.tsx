@@ -36,6 +36,8 @@ export default function Predict() {
       event.currentTarget.elements["B-sex"].title, 
       bTraits
     )
+    console.log(a);
+    console.log(b);
     let newKittens : Cat[] = []; 
     for (let i = 0; i < parseInt(event.currentTarget.litterSize.value); i++) {
       newKittens.push(a.makeKittenWith(b, `Kitten ${i + 1}`));
@@ -62,7 +64,7 @@ export default function Predict() {
               htmlFor="litterSize"
             >Number of Kittens: </label>
             <input
-              className="rounded-md bg-white/70 p-2"
+              className="rounded-md bg-white/70 p-2 border-2 border-accent-light"
               type="number"
               name="litterSize"
               id="litterSize"

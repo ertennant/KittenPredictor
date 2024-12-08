@@ -11,18 +11,18 @@ export default function KittenProfile({cat}: KittenProfileProps) {
   console.log(cat);
   return (
     <div className="flex flex-col items-center m-2">      
-      <div className="rounded-2xl p-6 border bg-white/60 backdrop-blur-md flex flex-col items-stretch">
-        <div className="rounded-2xl bg-white/75 p-2 my-2 border-2 border-slate-300 text-xl">
+      <div className="rounded-2xl p-6 border border-white bg-white/60 backdrop-blur-md flex flex-col items-stretch">
+        <div className="relative rounded-2xl bg-white/70 p-2 my-2 border-2 border-slate-300 text-xl">
           <input
             type="text"
-            className="h-min bg-transparent"
+            className="h-min bg-transparent outline-0"
             value={cat.name}
             readOnly={true}
           >
           </input>
           <button 
             type="button"
-            className="h-min align-middle" 
+            className="h-min align-middle absolute right-2" 
             title={cat.sex === "XX" ? "Female" : "Male"} 
             disabled
           >

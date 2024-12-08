@@ -1,4 +1,4 @@
-import { validColors, validCoatPatterns, validCoatTypes, validBreeds } from "./cat-data-defs";
+import { colors, validColors, validCoatPatterns, validCoatTypes, validBreeds } from "./cat-data-defs";
 
 type GeneProfile = {
   xy: string[],
@@ -62,8 +62,8 @@ class Cat {
         console.log(c);
         for (let trait of c) {
           trait = trait.toLowerCase(); 
-          if (trait in validColors) {
-            this.color = validColors[trait];
+          if (colors.includes(trait)) {
+            this.color = trait;
             if (this.color === "calico" || trait.endsWith(" and white")) {
               this.coatPatterns.push("bicolor");
             }
@@ -307,31 +307,6 @@ class Cat {
       }
     }
     
-    // BREED-SPECIFIC STUFF 
-    switch (this.breed?.toLowerCase()) {
-      case "siamese": 
-        this.genes.colorpoint = ["cs", "cs"];
-        break; 
-      case "burmese": 
-        this.genes.colorpoint = ["cb", "cb"];
-        break; 
-      case "tonkinese": 
-        // tonkinese can be cs/cs, cs/cb, or cb/cb 
-        // cs/cb x any can produce any of cs/cs, cs/cb, cb/cb
-        // cs/cs x anything != cb/cb 
-        // cb/cb x anything != cs/cs  
-        if (!this.coatPatterns.includes("mink") && !(this.coatPatterns.includes("colorpoint") && !(this.coatPatterns.includes("sepia")))) {
-          this.genes.colorpoint = [["cs", "cb"][Math.floor(Math.random() * 2)], ["cs", "cb"][Math.floor(Math.random() * 2)]];
-        }
-        break; 
-      case "sphynx": 
-        this.genes.devonsphynx = ["Hr", "Hr"];
-        break; 
-      case "devon rex": 
-        this.genes.devonsphynx = ["Dr", "Dr"]
-        break; 
-    }
-
     // COAT PATTERNS 
     if (this.coatPatterns.includes("tabby")) {
       this.genes.agouti = ["A", ["A", "a"][Math.floor(Math.random() * 2)]];
@@ -343,7 +318,7 @@ class Cat {
       this.genes.white = ["Ws", ["Ws", "w"][Math.floor(Math.random() * 2)]];
     }
         
-    // Colour point inheritance - DON'T MOVE THIS, MUST *FOLLOW* BREED LOGIC 
+    // Colour point inheritance 
     if (this.genes.colorpoint.length === 0) {
       if (this.coatPatterns.includes("colorpoint")) {
         this.genes.colorpoint = ["cs", ["cs", "cb"][Math.floor(Math.random() * 2)]];
@@ -356,6 +331,59 @@ class Cat {
         this.genes.colorpoint = ["C", "C"];
       }
     }
+
+    // BREED-SPECIFIC STUFF 
+    // no need to set breed-specific traits that are already the default, e.g. shorthair 
+    switch (this.breed?.toLowerCase()) {
+      case "persian": 
+      case "ragdoll": // ragdoll can be pointed, but doesn't have to be 
+      case "siberian": 
+      case "nebelung": 
+      case "maine coon": 
+      case "norwegian forest": 
+        if (!this.coatType) {
+          this.genes.longhair = ["n", "n"];
+        }
+        break; 
+      case "himalayan": 
+      case "birman": 
+      case "neva masquerade": 
+        if (!this.coatType) {
+          this.genes.longhair = ["n", "n"];
+        }
+      case "siamese": 
+      case "thai": 
+      case "balinese": 
+        // if the colorpoint type has been specified manually (i.e. the user inputs "colorpoint" or "mink", etc.), that should override the breed standard 
+        if (!this.coatPatterns.includes("colorpoint") && !this.coatPatterns.includes("mink") && !this.coatPatterns.includes("sepia")) {
+          this.genes.colorpoint = ["cs", "cs"];
+        }
+        break; 
+      case "burmese": 
+        if (!this.coatPatterns.includes("colorpoint") && !this.coatPatterns.includes("mink") && !this.coatPatterns.includes("sepia")) {
+          this.genes.colorpoint = ["cb", "cb"];
+        }
+        break; 
+      case "tonkinese": 
+        // tonkinese can be cs/cs, cs/cb, or cb/cb 
+        // cs/cb x any can produce any of cs/cs, cs/cb, cb/cb
+        // cs/cs x anything != cb/cb 
+        // cb/cb x anything != cs/cs  
+        if (!this.coatPatterns.includes("colorpoint") && !this.coatPatterns.includes("mink") && !this.coatPatterns.includes("sepia")) {
+          if (!this.coatPatterns.includes("mink") && !(this.coatPatterns.includes("colorpoint") && !(this.coatPatterns.includes("sepia")))) {
+            this.genes.colorpoint = [["cs", "cb"][Math.floor(Math.random() * 2)], ["cs", "cb"][Math.floor(Math.random() * 2)]];
+          }
+        }
+        break; 
+      case "sphynx": 
+        this.genes.devonsphynx = ["Hr", "Hr"];
+        break; 
+      case "devon rex": 
+        this.genes.devonsphynx = ["Dr", "Dr"]
+        break; 
+      }
+
+    
   }
   // Retrieves the set of genes this parent will provide to a kitten. 
   getKittenGenes(): GeneProfile {

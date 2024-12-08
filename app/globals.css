@@ -10,8 +10,19 @@
   --primary: 255 255 255; 
   --text-normal: 0 0 0; 
   --text-disabled: 100 116 139;
-  --accent: #10b981;
-  --accent-light: #34d399;
+  /* --accent: 16 185 129; */
+  --accent: 14 165 233;
+  /* --accent-light: 52 211 153; */
+  --accent-light: 34 211 238;
+  --orange: 250 145 60;
+  --cream: 255 215 170;
+  --gray: 75 85 100;
+  --chocolate: 65 45 30;
+  --cinnamon: 115 75 50;
+  --lilac: 160 150 160;
+  --fawn: 180 165 155;
+  --white: 255 255 255;
+  --black: 0 0 0;
 }
 
 /* @media (prefers-color-scheme: dark) {
@@ -31,46 +42,24 @@ body {
   margin: 0; 
   height: 100%;
   font-family: Arial, Helvetica, sans-serif;
-  /* background-image: linear-gradient(to bottom right, #06b6d4, #8b5cf6); */
-  /* Beautiful multicolour gradient background by Ana Tudor */
-  /* background:
-    radial-gradient(circle at 50% 0, 
-        rgba(255,0,0,.5), rgba(255,0,0,0) 70.71%), 
-    radial-gradient(circle at 6.7% 75%, 
-        rgba(0,0,255,.5), rgba(0,0,255,0) 70.71%), 
-    radial-gradient(circle at 93.3% 75%, 
-        rgba(0,255,0,.5), rgba(0,255,0,0) 70.71%); */
-
-  /* Version 2: yellow -> green -> blue -> red */
-  /* background:
-    radial-gradient(circle at 0% 0, 
-        rgba(255, 225, 0, 0.5), rgba(255,255,0,0) 70%), 
-    radial-gradient(circle at 0 100%, 
-        rgba(255, 0, 100, 0.5), rgba(255,0,100,0) 70%), 
-    radial-gradient(circle at 100% 100%, 
-        rgba(0, 255, 225, 0.5), rgba(0,255,255,0) 70%),
-    radial-gradient(circle at 100% 0%, 
-        rgba(65, 255, 0, 0.5), rgba(65,255,0,0) 70%)
-    ; */
-
-  /* Version 3: Complete Rainbow Spectrum */
   background:
+    /* gradient mix of several cat colours */
     radial-gradient(circle at 10% 10%, 
-      rgba(0, 255, 255, 0.3), rgba(0,255,255,0) 60%),
+      rgb(var(--orange)), rgba(0,255,255,0) 60%),
     radial-gradient(circle at 50% 10%, 
-      rgba(0, 255, 0, 0.3), rgba(0,255,0,0) 60%),
+      rgb(var(--cream)), rgba(0,255,0,0) 60%),
     radial-gradient(circle at 90% 10%, 
-      rgba(255, 255, 0, 0.3), rgba(0,255,255,0) 60%),
+      rgb(var(--fawn)), rgba(0,255,255,0) 60%),
     radial-gradient(circle at 90% 50%, 
-      rgba(255, 128, 0, 0.3), rgba(0,255,128,0) 60%),
+      rgb(var(--gray)), rgba(0,255,128,0) 60%),
     radial-gradient(circle at 90% 90%, 
-      rgba(255, 0, 0, 0.4), rgba(255,0,0,0) 60%),
+      rgb(var(--lilac)), rgba(255,0,0,0) 60%),
     radial-gradient(circle at 50% 90%, 
-      rgba(255, 0, 255, 0.3), rgba(255,0,255,0) 60%),
+      rgb(var(--white)), rgba(255,0,255,0) 60%),
     radial-gradient(circle at 10% 90%, 
-      rgba(128, 0, 255, 0.3), rgba(128,0,255,0) 60%),
+      rgb(var(--cinnamon)), rgba(128,0,255,0) 60%),
     radial-gradient(circle at 10% 50%, 
-      rgba(0, 128, 255, 0.3), rgba(128,0,255,0) 60%)
+      rgb(var(--chocolate)), rgba(128,0,255,0) 60%)
     ;
 }
 
