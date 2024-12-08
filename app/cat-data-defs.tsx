@@ -1,4 +1,5 @@
-export const mainList = [
+
+export const m = [
   "black",
   "black and white",
   "bicolor",
@@ -33,6 +34,7 @@ export const mainList = [
   "white",
 ]
 
+// array of valid cat colors 
 export const colors = [
   "black",
   "black and white",
@@ -59,6 +61,22 @@ export const colors = [
   "tortoiseshell and white",
   "dilute tortoiseshell and white",
   "white",
+]
+
+export const coatTypes = [
+  "hairless", 
+  "longhair", 
+  "rex", 
+  "shorthair", 
+]
+
+export const coatPatterns = [
+  "bicolor",
+  "colorpoint",
+  "mink", // a less-contrasting form of colorpoint, created by crossing Siamese with Burmese 
+  "sepia", // color pattern seen in Burmese 
+  "tabby",
+  "tricolor", // another name for tortoiseshell / calico 
 ]
 
 export const validColors : { [key: string]: string; } = {
@@ -108,7 +126,7 @@ export const validCoatPatterns : { [key: string]: string; } = {
 }
 
 // To Do: add more breeds
-export const validBreeds : string[] = [
+export const breeds : string[] = [
   "Abyssinian",
   "Angora",
   "Balinese",

@@ -4,43 +4,41 @@ import ParentCatProfile from '@/app/components/parent-cat-profile';
 import KittenProfile from '@/app/components/kitten-profile';
 import Cat from '@/app/cat';
 
-import { Dispatch, SetStateAction, useState } from 'react';
+import { useState } from 'react';
 export default function Predict() {
   const [kittens, setKittens] = useState<Cat[]>([]);
   
   function handleSubmit(event: any) {
     event.preventDefault(); 
-    // console.log(event);
-    let aTraits : string[] = []; 
-    let bTraits : string[]  = []; 
+    let fTraits : string[] = []; 
+    let mTraits : string[]  = []; 
     for (let element of event.currentTarget.elements) {
-      if (element.id.includes("A-trait")) {
-        aTraits.push(element.value);
-      } else if (element.id.includes("B-trait")) {
-        bTraits.push(element.value);
+      if (element.id.includes("F-trait")) {
+        fTraits.push(element.value);
+      } else if (element.id.includes("M-trait")) {
+        mTraits.push(element.value);
       }
     }
     // stop user from submitting empty parent cats
-    if (!event.currentTarget.elements["A-name"] || !event.currentTarget.elements["B-name"]
-        || aTraits.length === 0 || bTraits.length === 0) {
+    if (fTraits.length === 0 || mTraits.length === 0) {
       return; 
     }
     
-    let a = new Cat(
-      event.currentTarget.elements["A-name"].value, 
-      event.currentTarget.elements["A-sex"].title, 
-      aTraits
+    let father = new Cat(
+      event.currentTarget.elements["F-name"].value ?? "Father", 
+      "XY", 
+      fTraits
     )
-    let b = new Cat(
-      event.currentTarget.elements["B-name"].value, 
-      event.currentTarget.elements["B-sex"].title, 
-      bTraits
+    let mother = new Cat(
+      event.currentTarget.elements["M-name"].value ?? "Mother", 
+      "XX", 
+      mTraits
     )
-    console.log(a);
-    console.log(b);
+    console.log(father);
+    console.log(mother);
     let newKittens : Cat[] = []; 
     for (let i = 0; i < parseInt(event.currentTarget.litterSize.value); i++) {
-      newKittens.push(a.makeKittenWith(b, `Kitten ${i + 1}`));
+      newKittens.push(father.makeKittenWith(mother, `Kitten ${i + 1}`));
     }
     setKittens(newKittens);
   }
@@ -50,39 +48,39 @@ export default function Predict() {
       <form className="flex flex-col justify-center items-center" onSubmit={handleSubmit}>
         <div className="flex flex-row justify-center" >          
           <ParentCatProfile
-            parentID="A"
+            parentID="F"
           >
           </ParentCatProfile>
-          <ParentCatProfile
-            parentID="B"
-          >
-          </ParentCatProfile>
-        </div>
-        <div className="my-1 flex flex-col justify-center items-center gap-2">
-          <div>
-            <label
-              htmlFor="litterSize"
-            >Number of Kittens: </label>
+          <div className="my-1 flex flex-col justify-center items-center gap-2">
+            <div>
+              <label
+                htmlFor="litterSize"
+              >Number of Kittens: </label>
+              <input
+                className="rounded-md bg-white/70 p-2 border-2 border-accent-light"
+                type="number"
+                name="litterSize"
+                id="litterSize"
+                min={1}
+                max={10}
+                defaultValue={4}
+              >
+              </input>
+            </div>
             <input
-              className="rounded-md bg-white/70 p-2 border-2 border-accent-light"
-              type="number"
-              name="litterSize"
-              id="litterSize"
-              min={1}
-              max={10}
-              defaultValue={4}
+              className="rounded-2xl p-2 cursor-pointer bg-accent hover:bg-accent-light active:shadow-inner hover:shadow-glow-sm"
+              type="submit"
+              value="Generate Kittens"
             >
             </input>
           </div>
-          <input
-            className="rounded-2xl p-2 cursor-pointer bg-accent hover:bg-accent-light active:shadow-inner hover:shadow-glow-sm"
-            type="submit"
-            value="Generate Kittens"
+          <ParentCatProfile
+            parentID="M"
           >
-          </input>
+          </ParentCatProfile>
         </div>
       </form>
-      <div className="flex flex-row justify-center">
+      <div className="flex flex-row justify-center flex-wrap">
         {kittens.length > 0 ? kittens.map(k => 
           <KittenProfile
             key={k.name}

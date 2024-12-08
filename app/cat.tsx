@@ -1,4 +1,4 @@
-import { colors, validColors, validCoatPatterns, validCoatTypes, validBreeds } from "./cat-data-defs";
+import { colors, coatPatterns, coatTypes, breeds } from "./cat-data-defs";
 
 type GeneProfile = {
   xy: string[],
@@ -36,9 +36,6 @@ class Cat {
   constructor(a: string | Cat, b: string | Cat, c?: string[]) 
   {
 
-  // constructor(name: string, sex: string, color?: string, coatType?: string, coatPattern?: string, breed?: string); 
-  // constructor(a: string | GeneProfile, b: string | GeneProfile, color?: string, coatType?: string, coatPattern?: string, breed?: string) 
-  // {
     this.name = "Cat";
     this.sex = "unknown";
     this.color = "unknown";
@@ -67,11 +64,11 @@ class Cat {
             if (this.color === "calico" || trait.endsWith(" and white")) {
               this.coatPatterns.push("bicolor");
             }
-          } else if (trait in validCoatTypes) {
-            this.coatType = validCoatTypes[trait];
-          } else if (trait in validCoatPatterns && !this.coatPatterns.includes(trait)) {
+          } else if (coatTypes.includes(trait)) {
+            this.coatType = trait;
+          } else if (coatPatterns.includes(trait) && !this.coatPatterns.includes(trait)) {
             this.coatPatterns.push(trait);
-          } else if (validBreeds.includes(trait)) {
+          } else if (breeds.includes(trait)) {
             this.breed = trait; 
           }
         }
@@ -415,13 +412,9 @@ class Cat {
     if (this.sex === "XX" && mate.sex === "XY") {
       dad = mate; 
       mom = this; 
-      // dad = mate.getKittenGenes(); 
-      // mom = this.getKittenGenes(); 
     } else if (this.sex === "XY" && mate.sex === "XX") {
       dad = this; 
       mom = mate; 
-      // dad = this.getKittenGenes(); 
-      // mom = mate.getKittenGenes(); 
     } else {
       throw new Error(`Error: unable to make kitten without one XX parent and one XY parent.`);
     }
