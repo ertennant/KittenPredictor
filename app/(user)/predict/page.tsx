@@ -68,7 +68,7 @@ export default function Predict() {
               </input>
             </div>
             <input
-              className="rounded-2xl p-2 cursor-pointer bg-accent hover:bg-accent-light active:shadow-inner hover:shadow-glow-sm"
+              className="rounded-2xl p-2 cursor-pointer bg-accent hover:bg-accent-light active:shadow-inner hover:bg-accent-light hover:scale-110 transition duration-700 ease-in-out"
               type="submit"
               value="Generate Kittens"
             >

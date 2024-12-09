@@ -53,7 +53,7 @@ export default function ParentCatProfile({parentID}: AppProps) {
 
   return (
     <div className="rounded-2xl p-6 border border-white bg-white/70 backdrop-blur-md flex flex-col items-stretch m-2">
-      <div className={"relative rounded-2xl bg-white/20 focus-within:bg-white hover:bg-white border-2 border-accent-light p-2 my-2 text-xl"}>
+      <div className={"relative rounded-2xl bg-white/20 focus-within:bg-white hover:bg-white transition-colors border-2 border-accent-light p-2 my-2 text-xl"}>
         <input
           type="text"
           name={parentID + "-name"}
