@@ -58,7 +58,7 @@ class Cat {
       if (c) {
         console.log(c);
         for (let trait of c) {
-          trait = trait.toLowerCase(); 
+          // trait = trait.toLowerCase(); // no longer needed 
           if (colors.includes(trait)) {
             this.color = trait;
             if (this.color === "calico" || trait.endsWith(" and white")) {
@@ -229,8 +229,8 @@ class Cat {
           this.coatType = "curly";
         }
       }
-
-      if (father.breed && mother.breed && !father.breed.includes("domestic") && !mother.breed.includes("domestic")) {
+      console.log(father.breed, mother.breed);
+      if (father.breed && mother.breed && !father.breed.includes("Domestic") && !mother.breed.includes("Domestic")) {
         if (father.breed === mother.breed) {
           this.breed = father.breed; 
         } else {

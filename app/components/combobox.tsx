@@ -18,7 +18,9 @@ export default function ComboBox({options, selectOption}: ComboBoxProps) {
     setCurrentValue(event.currentTarget.value);
   }
 
-  function toggleList() {
+  function toggleList(event: any) {
+    event.stopPropagation(); 
+    event.preventDefault(); 
     setIsOpen(!isOpen);
   }
 
@@ -43,7 +45,7 @@ export default function ComboBox({options, selectOption}: ComboBoxProps) {
         </button>
       </div>
       {isOpen ? 
-        <ul role="listbox" className="rounded-lg border-2 border-accent-light w-56 bg-white max-h-60 overflow-scroll absolute my-12" >
+        <ul role="listbox" className="absolute rounded-lg border-2 border-accent-light w-56 bg-white max-h-60 my-12 overflow-scroll" >
           {options.filter(trait => trait.toLowerCase().startsWith(currentValue.toLowerCase())).map(trait => 
             <li key={trait} id={"li-" + trait} onClick={handleSelect} className={"cursor-pointer p-2 my-1 hover:bg-accent-light/20 transition-colors"}>{trait}</li>
           )}

@@ -19,6 +19,7 @@ export default function Predict() {
         mTraits.push(element.value);
       }
     }
+    console.log(fTraits);
     // stop user from submitting empty parent cats
     if (fTraits.length === 0 || mTraits.length === 0) {
       return; 
