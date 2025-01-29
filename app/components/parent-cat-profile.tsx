@@ -17,21 +17,18 @@ export default function ParentCatProfile({parentID}: AppProps) {
   );
   
   function updateTraits(event: any) {
-    let trait = event.currentTarget.id.slice(3).toLowerCase();
+    let trait = event.currentTarget.id.slice(3);
     if (traits.has(trait)) {
       return; 
     }
 
     let updated = new Map(traits); 
-    // dealt with separately because male/female can be set with a button, while the rest are set with text inputs 
     if (colors.includes(trait)) {
       updated.set("color", trait);
     } else if (coatPatterns.includes(trait)) { 
-      // Don't change colors and coatPatterns to an if/else, because calico maps to both calico color and bicolor pattern (calico = tortie + bicolor)
       updated.set(trait, trait);
     }
 
-    // note: you probably have to fix this. find out whether rex (curly) can occur with both shorthair and longhair.
     if (coatTypes.includes(trait)) { 
       updated.set("coatType", trait);
     }

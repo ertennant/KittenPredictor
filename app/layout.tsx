@@ -29,6 +29,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
+        <footer className='absolute bottom-0 w-full text-center'>
+          <small>
+            Copyright &copy; 2025 Elizabeth Tennant 
+          </small>
+        </footer>
       </body>
     </html>
   );
