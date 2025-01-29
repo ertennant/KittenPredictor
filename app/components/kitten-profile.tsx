@@ -27,7 +27,7 @@ export default function KittenProfile({cat}: KittenProfileProps) {
             disabled
           >
             <Image
-              src={cat.sex === "XX" ? "/female.svg" : "/male.svg"}
+              src={cat.sex === "XX" ? "./female.svg" : "./male.svg"}
               alt={cat.sex ?? ""}
               width={28}
               height={28}

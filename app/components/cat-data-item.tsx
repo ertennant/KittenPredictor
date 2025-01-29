@@ -40,7 +40,7 @@ export default function CatDataItem({readOnly, catID, traitType, traitValue, onD
           className="bg-white rounded-full p-1 absolute -top-2 -right-2 hover:shadow-md hover:shadow-slate-500/25"
           >
           <Image
-            src="/close.svg"
+            src="./close.svg"
             alt="remove trait"
             width={12}
             height={12}

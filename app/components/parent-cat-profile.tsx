@@ -64,7 +64,7 @@ export default function ParentCatProfile({parentID}: AppProps) {
         </input>
         <Image
           className="h-min align-middle absolute inline right-2"
-          src={traits.get("sex") === "XX" ? "/female.svg" : "/male.svg"}
+          src={traits.get("sex") === "XX" ? "./female.svg" : "./male.svg"}
           alt={traits.get("sex") ?? ""}
           width={28}
           height={28}
