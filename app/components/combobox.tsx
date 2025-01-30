@@ -2,10 +2,13 @@ import { useState } from "react";
 import Image from "next/image";
 type ComboBoxProps = {
   options: string[],
-  selectOption: any,
+  selectOption: any | undefined,
+  placeholder: string | undefined, 
+  size: string,
+  htmlID: string | undefined, 
 }
 
-export default function ComboBox({options, selectOption}: ComboBoxProps) {
+export default function ComboBox({options, selectOption, placeholder, size, htmlID}: ComboBoxProps) {
   let [currentValue, setCurrentValue] = useState("");
   let [isOpen, setIsOpen] = useState(false);
 
@@ -25,27 +28,39 @@ export default function ComboBox({options, selectOption}: ComboBoxProps) {
   }
 
   function handleSelect(event: any) {
-    setCurrentValue("");
-    setIsOpen(false);
-    selectOption(event);
+    if (selectOption) {
+      setCurrentValue("");
+      setIsOpen(false);
+      selectOption(event);
+    }
   }
 
   return (
-    <div className="flex flex-col items-stretch rounded-2xl bg-white/20 focus-within:bg-white focus-within:bg-white hover:bg-white border-2 border-accent-light my-2text-lg">
-      <div className="relative text-xl">
-        <input onChange={updateValue} onKeyUp={e => e.key == 'Enter' ? handleSelect(e) : ""} className="p-2 bg-transparent outline-none" value={currentValue} placeholder="Enter Trait"></input>
-        <button onClick={toggleList} className="absolute inset-y-1 right-1 rounded-full hover:bg-accent-light/50 transition-colors duration-300 p-2 align-middle">
+    <div className="flex flex-col items-stretch rounded-2xl bg-white/20 focus-within:bg-white hover:bg-white border-2 border-accent-light"
+      style={isOpen ? {zIndex: 99} : {}}
+    >
+      <div className={"relative" + (size == "lg" ? " text-xl" : "")}>
+        <input id={htmlID ?? ""} 
+          onChange={updateValue} 
+          onKeyUp={e => e.key == 'Enter' ? handleSelect(e) : ""} 
+          className={"p-2 bg-transparent outline-none" + (size == "lg" ? " w-56" : " w-20")} 
+          value={currentValue} 
+          placeholder={placeholder ?? ""}
+        ></input>
+        <button 
+          onClick={toggleList} 
+          className="absolute inset-y-1 right-1 rounded-full hover:bg-accent-light/50 transition-colors duration-300 p-2 align-middle">
           <Image
             src={isOpen ? "./up.svg" : "./down.svg"}
             alt={isOpen ? "Close List" : "Open List"}
-            height={20}
-            width={20}
+            height={size == "lg" ? 20 : 16}
+            width={size == "lg" ? 20 : 16}
           >
           </Image>
         </button>
       </div>
       {isOpen ? 
-        <ul role="listbox" className="absolute rounded-lg border-2 border-accent-light w-56 bg-white max-h-60 my-12 overflow-scroll" >
+        <ul role="listbox" className={"absolute rounded-lg border-2 border-accent-light bg-white max-h-60 my-12 overflow-scroll" + (size == "lg" ? " w-56" : " w-20")} >
           {options.filter(trait => trait.toLowerCase().startsWith(currentValue.toLowerCase())).map(trait => 
             <li key={trait} id={"li-" + trait} onClick={handleSelect} className={"cursor-pointer p-2 my-1 hover:bg-accent-light/20 transition-colors"}>{trait}</li>
           )}

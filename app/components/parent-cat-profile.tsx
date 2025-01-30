@@ -86,6 +86,9 @@ export default function ParentCatProfile({parentID}: AppProps) {
       <ComboBox
         options={colors.concat(coatTypes, coatPatterns, breeds)}
         selectOption={updateTraits}
+        size="lg"
+        htmlID={parentID + "-traitInput"}
+        placeholder="Enter Trait"
       >
       </ComboBox>
     </div>

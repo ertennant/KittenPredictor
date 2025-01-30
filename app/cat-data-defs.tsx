@@ -181,3 +181,17 @@ export const catTraitCSS : { [key: string]: string} = {
   "tortoiseshell-and-white": "bg-tortie-d",
   "dilute-tortoiseshell-and-white": "bg-tortie-dw",
 }
+
+export const genes : { [key: string]: string[] } = {
+  "Orange": ["OO", "O", "Oo", "oo"],
+  "Brown": ["BB", "Bb", "bb"], 
+  "Dilute": ["DD", "Dd", "dd"], 
+  "White": ["WW", "WS", "SS", "Ss", "ww"], 
+  "Agouti": ["AA", "Aa", "aa"], 
+}
+
+export const tooltips : { [key: string]: string} = {
+  "Agouti": "This gene causes tabby pattern.",
+  "Dilute": "Lightens existing colour.",
+  "Orange": "Since it is linked to the X chromosome, males can only have one copy, O or o. Females can also be Oo, tortoiseshell or calico. This is why male tortoiseshells do not exist."
+}
