@@ -89,6 +89,7 @@ export default function ParentCatProfile({parentID}: AppProps) {
         size="lg"
         htmlID={parentID + "-traitInput"}
         placeholder="Enter Trait"
+        reuseCombobox={true} 
       >
       </ComboBox>
     </div>

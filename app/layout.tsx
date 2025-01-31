@@ -28,6 +28,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <nav className="top-0 w-full bg-white/80 p-2 h-10">
+          <a href="/" className="p-2 h-10 hover:bg-white">Basic</a>
+          <a href="/advanced" className="p-2 h-10 hover:bg-white">Advanced</a>
+        </nav>
         {children}
         <footer className='absolute bottom-0 w-full text-center'>
           <small>

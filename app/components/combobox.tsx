@@ -3,12 +3,14 @@ import Image from "next/image";
 type ComboBoxProps = {
   options: string[],
   selectOption: any | undefined,
-  placeholder: string | undefined, 
-  size: string,
-  htmlID: string | undefined, 
+  placeholder?: string, 
+  size?: string,
+  htmlID?: string, 
+  reuseCombobox?: boolean,
+  traitType?: string
 }
 
-export default function ComboBox({options, selectOption, placeholder, size, htmlID}: ComboBoxProps) {
+export default function ComboBox({options, selectOption, placeholder, size, htmlID, reuseCombobox, traitType}: ComboBoxProps) {
   let [currentValue, setCurrentValue] = useState("");
   let [isOpen, setIsOpen] = useState(false);
 
@@ -29,7 +31,11 @@ export default function ComboBox({options, selectOption, placeholder, size, html
 
   function handleSelect(event: any) {
     if (selectOption) {
-      setCurrentValue("");
+      if (reuseCombobox) {
+        setCurrentValue("");
+      } else {
+          setCurrentValue(event.currentTarget.id.split('-')[1]);
+      }
       setIsOpen(false);
       selectOption(event);
     }
@@ -62,7 +68,7 @@ export default function ComboBox({options, selectOption, placeholder, size, html
       {isOpen ? 
         <ul role="listbox" className={"absolute rounded-lg border-2 border-accent-light bg-white max-h-60 my-12 overflow-scroll" + (size == "lg" ? " w-56" : " w-20")} >
           {options.filter(trait => trait.toLowerCase().startsWith(currentValue.toLowerCase())).map(trait => 
-            <li key={trait} id={"li-" + trait} onClick={handleSelect} className={"cursor-pointer p-2 my-1 hover:bg-accent-light/20 transition-colors"}>{trait}</li>
+            <li key={trait} id={!traitType ? "li-" + trait : "li-" + trait + '-' + traitType} onClick={handleSelect} className={"cursor-pointer p-2 my-1 hover:bg-accent-light/20 transition-colors"}>{trait}</li>
           )}
         </ul>
         : ""

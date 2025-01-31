@@ -5,8 +5,8 @@ import { colors, catTraitCSS } from "../cat-data-defs";
 
 type DataInputProps = {
   catID: string, 
-  traitType: string, 
   traitValue: string, 
+  traitType?: string, 
   readOnly?: boolean, 
   onDelete?: any,
   onChange?: any,
@@ -31,7 +31,7 @@ export default function CatDataItem({readOnly, catID, traitType, traitValue, onD
         value={traitValue}
         readOnly
         onChange={onChange}
-        placeholder={"Enter " + traitType.charAt(0).toUpperCase() + traitType.slice(1)}
+        placeholder={traitType ? "Enter " + traitType.charAt(0).toUpperCase() + traitType.slice(1) : ""}
       >
       </input>
       {!readOnly ?
