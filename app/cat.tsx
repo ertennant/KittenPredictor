@@ -68,33 +68,33 @@ class Cat {
             this.coatType = trait;
           } else if (coatPatterns.includes(trait) && !this.coatPatterns.includes(trait)) {
             this.coatPatterns.push(trait);
-          } else if (breeds.includes(trait)) {
+          } else if (breeds.includes(trait) && !trait.startsWith("Domestic")) {
             this.breed = trait; 
           }
         }
+      }
+      this.genes = {
+          xy: [],
+          orange: [], 
+          brown: [],
+          dilute: [],
+          white: [],
+          longhair: [],
+          agouti: [],
+          colorpoint: [],
+        }
+        this.generateGenes();    
 
         if (!this.breed) {
           if (this.coatType === "longhair") {
-            this.breed = "domestic longhair";
+            this.breed = "Domestic Longhair";
           } else if (this.coatType === "shorthair") {
-            this.breed = "domestic shorthair";
+            this.breed = "Domestic Shorthair";
           } else {
-            this.breed = "domestic unknown";
+            this.breed = "Domestic Unknown";
           }
         }
-      }
 
-      this.genes = {
-        xy: [],
-        orange: [], 
-        brown: [],
-        dilute: [],
-        white: [],
-        longhair: [],
-        agouti: [],
-        colorpoint: [],
-      }
-      this.generateGenes();
     } else if (typeof a === "object" && typeof b === "object") {
       let father = a; 
       let mother = b; 
