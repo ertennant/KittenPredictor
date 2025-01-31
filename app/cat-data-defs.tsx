@@ -187,8 +187,8 @@ export const catTraitCSS : { [key: string]: string} = {
 export const genes : { [key: string]: string[] } = {
   "White": ["WW", "WS", "Ww", "SS", "Ss", "ww"], 
   "Orange": ["OO", "O", "Oo", "oo", "o"],
-  "Dilute": ["DD", "Dd", "dd"], 
   "Brown": ["BB", "Bb", "Bbl", "bb", "bbl", "blbl"], 
+  "Dilute": ["DD", "Dd", "dd"], 
   "Agouti": ["AA", "Aa", "aa"], 
   "Colorpoint": ["CC", "Ccs", "Ccb", "cscs", "cbcb", "cscb", "cc"],
   "Longhair": ["LL", "Ll", "ll"]

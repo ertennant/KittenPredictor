@@ -15,9 +15,11 @@ export function convertToPhenoType(genes: Map<any, any>) {
   if (genes.get("white") && geneMappings[genes.get("white")!] == "white") {
     console.log("A");
     result.set("white", "white");
-  } else if (genes.get("orange") != "" && genes.get("orange")! in geneMappings) {
+  } else if (genes.get("orange") && genes.get("orange")! in geneMappings) {
     result.set("orange", geneMappings[genes.get("orange")!]); // either orange or tortoiseshell 
-    result.set("agouti", "tabby"); // orange cats are always tabby regardless of agouti gene 
+    if (result.get("orange") == "orange") {
+      result.set("agouti", "tabby"); // orange cats are always tabby regardless of agouti gene 
+    }
   } else if (genes.has("brown") && genes.get("brown")! in geneMappings) {
     result.set("brown", geneMappings[genes.get("brown")!]); // chocolate or cinnamon 
   } 

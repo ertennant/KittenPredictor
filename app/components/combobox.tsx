@@ -42,20 +42,20 @@ export default function ComboBox({options, selectOption, placeholder, size, html
   }
 
   return (
-    <div className="flex flex-col items-stretch rounded-2xl bg-white/20 focus-within:bg-white hover:bg-white border-2 border-accent-light"
+    <div className={"flex flex-col items-stretch bg-white/20 focus-within:bg-white hover:bg-white border-2 border-accent-light" + (size == "lg" ? " rounded-2xl" : " rounded-lg")}
       style={isOpen ? {zIndex: 99} : {}}
     >
       <div className={"relative" + (size == "lg" ? " text-xl" : "")}>
         <input id={htmlID ?? ""} 
           onChange={updateValue} 
           onKeyUp={e => e.key == 'Enter' ? handleSelect(e) : ""} 
-          className={"p-2 bg-transparent outline-none" + (size == "lg" ? " w-56" : " w-20")} 
+          className={"bg-transparent outline-none" + (size == "lg" ? " p-2 w-56" : " py-1 px-2 w-20")} 
           value={currentValue} 
           placeholder={placeholder ?? ""}
         ></input>
         <button 
           onClick={toggleList} 
-          className="absolute inset-y-1 right-1 rounded-full hover:bg-accent-light/50 transition-colors duration-300 p-2 align-middle">
+          className={"absolute rounded-full hover:bg-accent-light/50 transition-colors duration-300 align-middle inset-y-1" + (size == "lg" ? " p-2 right-1" : " p-1 right-0")}>
           <Image
             src={isOpen ? "./up.svg" : "./down.svg"}
             alt={isOpen ? "Close List" : "Open List"}
@@ -66,7 +66,7 @@ export default function ComboBox({options, selectOption, placeholder, size, html
         </button>
       </div>
       {isOpen ? 
-        <ul role="listbox" className={"absolute rounded-lg border-2 border-accent-light bg-white max-h-60 my-12 overflow-scroll" + (size == "lg" ? " w-56" : " w-20")} >
+        <ul role="listbox" className={"absolute rounded-lg border-2 border-accent-light bg-white max-h-60 overflow-scroll" + (size == "lg" ? " w-56 my-12" : " w-20 my-8")} >
           {options.filter(trait => trait.toLowerCase().startsWith(currentValue.toLowerCase())).map(trait => 
             <li key={trait} id={!traitType ? "li-" + trait : "li-" + trait + '-' + traitType} onClick={handleSelect} className={"cursor-pointer p-2 my-1 hover:bg-accent-light/20 transition-colors"}>{trait}</li>
           )}
