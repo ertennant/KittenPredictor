@@ -1,90 +1,86 @@
-import { colors, coatPatterns, coatTypes, breeds } from "./cat-data-defs";
-
-type GeneProfile = {
-  xy: string[],
-  orange: string[], // O, O/O = orange; O/o = tortie; o, o/o = not orange 
-  brown: string[], // B/B, B/b, B/bl = black; b/b, b/bl = brown; bl/bl = cinnamon 
-  dilute: string[], // D/D, D/d = not dilute, d/d = dilute 
-  white: string[], // W/W, W/Ws, W/w = white; Ws/w, Ws/Ws = bicolor; w/w = not white 
-  longhair: string[], // N/N, N/n = short hair; n/n = long hair 
-  agouti: string[]; // AA, Aa = tabby; aa = self (solid) 
-  colorpoint: string[]; // C/C, C/cs, C/cb = non-colorpoint; cs/cs = Siamese colorpoint; cb/cb = Burmese colorpoint; cb/cs = mink colorpoint 
-  // note: rex and hairless are caused by several different breed-specific mutations that work separately 
-  hairless?: string[], // for breed-specific hairless genes for Sphynx, etc. 
-  rex?: string[], // for breed-specific rex (curly hair) genes for Cornish Rex, etc. 
-  devonsphynx?: string[], // Hr/Hr, Hr/Dr = hairless; Dr/Dr = rex; N/N = normal; N/Hr, N/Dr = carrier 
-}
-
-const validXYValues : { [key: string]: string; } = {
-  "xy": "XY", 
-  "xx": "XX", 
-  "male": "XY",
-  "female": "XX",
-}
+import { colors, coatPatterns, coatTypes, breeds, traitMappings, dilutions } from "./cat-data-defs";
+import { combineAlleles, convertToPhenoType, sortAlleles, splitAlleles } from "./genotype";
 
 class Cat {
   name: string; 
-  sex: string; // XX, XY
+  xy: string; // XX, XY
   color: string; // black, orange, tortoiseshell, gray, chocolate, cinnamon, cream,... 
   coatType: string; // short hair, long hair, rex, hairless 
   coatPatterns: string[]; // tabby, tuxedo, etc.
   breed?: string; 
-  genes: GeneProfile; 
+  genes: Map<string, string[] | never>;
+  // genes: {[key: string]: string[] | never}; 
   
   constructor(name: string, sex: string, traits?: string[]);
+  constructor(name: string, sex: string, geneMap?: Map<string, string>);
   constructor(father: Cat, mother: Cat);
-  constructor(a: string | Cat, b: string | Cat, c?: string[]) 
+  constructor(a: string | Cat, b: string | Cat, c?: string[] | Map<string, string>) 
   {
 
     this.name = "Cat";
-    this.sex = "unknown";
+    this.xy = "unknown";
     this.color = "unknown";
     this.coatType = "unknown";
     this.coatPatterns = [];
-
+    this.genes = new Map(
+      [
+        ["xy", []],
+        ["orange", []], 
+        ["brown", []],
+        ["dilute", []],
+        ["white", []],
+        ["longhair", []],
+        ["agouti", []],
+        ["colorpoint", []]
+      ]
+    )
+    
     if (typeof a === "string" && typeof b === "string") {
       
       if (a === "") {
         throw new Error("Error: cannot create Cat with empty name.");
       } 
 
-      if (!Object.keys(validXYValues).includes(b.toLowerCase())) {
-        throw new Error(`Error: cannot create Cat ${a} because XY value ${b} is invalid.`);
-      }
-
       this.name = a; 
-      this.sex = validXYValues[b.toLowerCase()]; 
 
       if (c) {
-        console.log(c);
-        for (let trait of c) {
-          // trait = trait.toLowerCase(); // no longer needed 
-          if (colors.includes(trait)) {
-            this.color = trait;
-            if (this.color === "calico" || trait.endsWith(" and white")) {
-              this.coatPatterns.push("bicolor");
-            }
-          } else if (coatTypes.includes(trait)) {
-            this.coatType = trait;
-          } else if (coatPatterns.includes(trait) && !this.coatPatterns.includes(trait)) {
-            this.coatPatterns.push(trait);
-          } else if (breeds.includes(trait) && !trait.startsWith("Domestic")) {
-            this.breed = trait; 
-          }
-        }
-      }
-      this.genes = {
-          xy: [],
-          orange: [], 
-          brown: [],
-          dilute: [],
-          white: [],
-          longhair: [],
-          agouti: [],
-          colorpoint: [],
-        }
-        this.generateGenes();    
 
+        if (c instanceof Map) {
+          for (let entry of splitAlleles(c).entries()) {
+            // this.genes[entry[0]] = entry[1]; 
+            this.genes.set(entry[0], entry[1]); 
+          }
+          let p = convertToPhenoType(c);
+          for (let value of p.values()) {
+            if (colors.includes(value)) {
+              this.color = value; 
+            } else if (coatTypes.includes(value)) {
+              this.coatType = value; 
+            } else if (coatPatterns.includes(value)) {
+              this.coatPatterns.push(value);
+            } else if (value == "XX" || value == "XY") {
+              this.xy = value;
+            } 
+          }
+        } else {
+          this.xy = b.toUpperCase(); 
+          for (let trait of c) {
+            // trait = trait.toLowerCase(); // no longer needed 
+            if (colors.includes(trait)) {
+              this.color = trait;
+              if (this.color === "calico" || trait.endsWith(" and white")) {
+                this.coatPatterns.push("bicolor");
+              }
+            } else if (coatTypes.includes(trait)) {
+              this.coatType = trait;
+            } else if (coatPatterns.includes(trait) && !this.coatPatterns.includes(trait)) {
+              this.coatPatterns.push(trait);
+            } else if (breeds.includes(trait) && !trait.startsWith("Domestic")) {
+              this.breed = trait; 
+            }
+          }
+          this.generateGenes();    
+        }
         if (!this.breed) {
           if (this.coatType === "longhair") {
             this.breed = "Domestic Longhair";
@@ -94,6 +90,7 @@ class Cat {
             this.breed = "Domestic Unknown";
           }
         }
+      }
 
     } else if (typeof a === "object" && typeof b === "object") {
       let father = a; 
@@ -102,134 +99,40 @@ class Cat {
       let mGenes = mother.getKittenGenes(); 
 
       this.name = "Kitten";
-      this.genes = {
-        xy: [],
-        orange:[], 
-        brown: [],
-        dilute: [],
-        white: [],
-        longhair: [],
-        agouti: [], 
-        colorpoint: [], 
+
+      for (let key of fGenes.keys()) {
+        this.genes.set(key, fGenes.get(key)!.concat(mGenes.get(key)!));
       }
 
-      if (fGenes.xy && mGenes.xy) {
-        this.genes.xy = fGenes.xy.concat(mGenes.xy).sort(); 
-        this.sex = this.genes.xy.join("").toUpperCase();
-      } else {
-        throw new Error("Error: cannot create kitten without X or Y chromosomes from both parents.");
+      sortAlleles(this.genes);
+
+      for (let value of convertToPhenoType(combineAlleles(this.genes)).values()) {
+        if (colors.includes(value)) {
+          this.color = value; 
+        } else if (coatTypes.includes(value)) {
+          this.coatType = value; 
+        } else if (coatPatterns.includes(value)) {
+          this.coatPatterns.push(value);
+        } else if (value == "XX" || value == "XY") {
+          this.xy = value;
+        } 
       }
 
-      // COAT COLORS 
-      if (fGenes.white.length > 0 && mGenes.white.length > 0) {
-        this.genes.white = fGenes.white.concat(mGenes.white).sort(); 
-      }
+      // TODO: rex and hairless (below is old code to replace)
+      // if (fGenes.devonsphynx && mGenes.devonsphynx) {
+      //   this.genes.devonsphynx = fGenes.devonsphynx.concat(mGenes.devonsphynx).sort().reverse();
+      // }
 
-      if (fGenes.orange.length > 0 && mGenes.orange.length > 0) {
-        if (this.sex === "XY") {
-          this.genes.orange = mGenes.orange; 
-        } else {
-          this.genes.orange = fGenes.orange.concat(mGenes.orange).sort();
-        }
-      }
+      // if (this.genes.devonsphynx) {
+      //   if (this.genes.devonsphynx.includes("Dr") && this.genes.devonsphynx.includes("Hr")) {
+      //     this.coatType = "hairless";
+      //   } else if (this.genes.devonsphynx.includes("Hr")) {
+      //     this.coatType = "hairless";
+      //   } else if (this.genes.devonsphynx.includes("Dr")) {
+      //     this.coatType = "curly";
+      //   }
+      // }
 
-      if (fGenes.dilute.length > 0 && mGenes.dilute.length > 0) {
-        this.genes.dilute = fGenes.dilute.concat(mGenes.dilute).sort(); 
-      }
-
-      if (fGenes.brown.length > 0 && mGenes.brown.length > 0) {
-        this.genes.brown = fGenes.brown.concat(mGenes.brown).sort(); 
-      }
-
-      if (this.genes.white.includes("W")) {
-        this.color = "white"; 
-      } else if (["o", "oo"].includes(this.genes.orange.join("")) || this.genes.orange.length === 0) {
-        // deal with brown and dilute 
-        if (this.genes.brown.length === 0 || this.genes.brown.includes("B")) {
-          if (this.genes.dilute.join("") === "dd") {
-            this.color = "gray";
-          } else {
-            this.color = "black";
-          }
-        } else if (this.genes.brown.includes("b")) {
-          if (this.genes.dilute.join("") === "dd") {
-            this.color = "lilac";
-          } else {
-            this.color = "chocolate";
-          }
-        } else if (this.genes.brown.join("") === "blbl") {
-          if (this.genes.dilute.join("") === "dd") {
-            this.color = "fawn";
-          } else {
-            this.color = "cinnamon";
-          }
-        }
-      } else if (["O", "OO"].includes(this.genes.orange.join(""))) {
-        if (this.genes.dilute.join("") === "dd") {
-          this.color = "cream";
-        } else {
-          this.color = "orange";
-        }
-      } else if (this.genes.orange.join("") === "Oo") {
-        if (this.genes.dilute.join("") === "dd") {
-          this.color = "dilute tortoiseshell";
-        } else {
-          this.color = "tortoiseshell";
-        }
-      } 
-
-      // COAT PATTERNS (tabby, bicolor, colorpoint, etc.)
-      if (!this.genes.white.includes("W") && this.genes.white.includes("Ws")) {
-        this.coatPatterns.push("bicolor");
-      } 
-
-      if (fGenes.agouti.length > 0 && mGenes.agouti.length > 0) {
-        this.genes.agouti = fGenes.agouti.concat(mGenes.agouti).sort(); 
-      }
-
-      if (this.genes.agouti.includes("A")) {
-        this.coatPatterns.push("tabby");
-      }
-
-      if (fGenes.colorpoint.length > 0 && mGenes.colorpoint.length > 0) {
-        this.genes.colorpoint = fGenes.colorpoint.concat(mGenes.colorpoint).sort(); 
-      }
-
-      if (!this.genes.colorpoint.includes("C")) {
-        if (this.genes.colorpoint.includes("cs") && !this.genes.colorpoint.includes("cb")) {
-          this.coatPatterns.push("colorpoint");
-        } else if (this.genes.colorpoint.includes("cs") && this.genes.colorpoint.includes("cb")) {
-          this.coatPatterns.push("mink");
-        } else {
-          this.coatPatterns.push("sepia");
-        }
-      }
-
-      // COAT TYPES (longhair, shorthair, etc.)
-      if (fGenes.longhair.length > 0 && mGenes.longhair.length > 0) {
-        this.genes.longhair = fGenes.longhair.concat(mGenes.longhair);
-      }
-
-      if (this.genes.longhair.includes("N")) {
-        this.coatType = "shorthair";
-      } else if (this.genes.longhair.length > 0) {
-        this.coatType = "longhair";
-      } 
-
-      if (fGenes.devonsphynx && mGenes.devonsphynx) {
-        this.genes.devonsphynx = fGenes.devonsphynx.concat(mGenes.devonsphynx).sort().reverse();
-      }
-
-      if (this.genes.devonsphynx) {
-        if (this.genes.devonsphynx.includes("Dr") && this.genes.devonsphynx.includes("Hr")) {
-          this.coatType = "hairless";
-        } else if (this.genes.devonsphynx.includes("Hr")) {
-          this.coatType = "hairless";
-        } else if (this.genes.devonsphynx.includes("Dr")) {
-          this.coatType = "curly";
-        }
-      }
-      console.log(father.breed, mother.breed);
       if (father.breed && mother.breed && !father.breed.includes("Domestic") && !mother.breed.includes("Domestic")) {
         if (father.breed === mother.breed) {
           this.breed = father.breed; 
@@ -238,17 +141,15 @@ class Cat {
         }
       } else {
         if (this.coatType === "longhair") {
-          this.breed = "domestic longhair";
+          this.breed = "Domestic Longhair";
         } else if (this.coatType === "shorthair") {
-          this.breed = "domestic shorthair";
+          this.breed = "Domestic Shorthair";
         }
       }
 
     } else {
       throw new Error("Error: cannot create Cat. Invalid arguments.");
     }
-
-    console.log(this);
   }
 
   setName(name: string) {
@@ -256,77 +157,86 @@ class Cat {
   }
 
   generateGenes(): void {
-    if (this.sex === "XX") {
-      this.genes.xy = ["X", "X"];
-    } else if (this.sex === "XY") {
-      this.genes.xy = ["X", "Y"];
-    }
-
-    if (this.color !== "unknown") {
-      // orange is on the X chromosome, so male cats have only one copy, while female cats have two 
-      if (["orange", "cream"].includes(this.color)) {
-        if (this.sex === "XY") {
-          this.genes.orange = ["O"];
-        } else {
-          this.genes.orange = ["O", "O"];
-        }
-      } else if (this.color.includes("tortoiseshell") || this.color.includes("calico")) {
-        this.genes.orange = ["O", "o"];
-      } else {
-        if (this.sex === "XY") {
-          this.genes.orange = ["o"];
-        } else {
-          this.genes.orange = ["o", "o"];
-        }
-      }
-      if (this.color === "white") {
-        // white prevents other colors from being visible and is unaffected by dilution 
-        this.genes.white = ["W", ["W", "Ws", "w"][Math.floor(Math.random() * 3)]];
-      } else if (["chocolate", "lilac"].includes(this.color)) {
-        this.genes.brown = ["b", ["b", "bl"][Math.floor(Math.random() * 2)]];
-      } else if (["cinnamon", "fawn"].includes(this.color)) {
-        this.genes.brown = ["bl", "bl"];
-      } else {
-        this.genes.brown = ["B", ["B", "b", "bl"][Math.floor(Math.random() * 3)]];
-      }
-      if (["gray", "lilac", "fawn", "cream"].includes(this.color) || this.color.includes("dilute")) {
-        this.genes.dilute = ["d", "d"];
-      } else {
-        this.genes.dilute = ["D", ["D", "d"][Math.floor(Math.random() * 2)]];
-      }
+    if (this.xy === "XX") {
+      this.genes.set("xy", ["X", "X"]);
+    } else if (this.xy === "XY") {
+      this.genes.set("xy", ["X", "Y"]);
     }
 
     if (this.coatType !== "unknown") {
-      if (this.coatType === "longhair") {
-        this.genes.longhair = ["n", "n"];
-      } else if (this.coatType === "shorthair") {
-        this.genes.longhair = ["N", ["N", "n"][Math.floor(Math.random() * 2)]];
-      }
-    }
-    
-    // COAT PATTERNS 
-    if (this.coatPatterns.includes("tabby")) {
-      this.genes.agouti = ["A", ["A", "a"][Math.floor(Math.random() * 2)]];
-    } else {
-      this.genes.agouti = ["a", "a"];
+      this.genes.set("longhair", traitMappings[this.coatType][Math.floor(Math.random() * traitMappings[this.coatType].length)])
     }
 
-    if (this.coatPatterns.includes("bicolor")) {
-      this.genes.white = ["Ws", ["Ws", "w"][Math.floor(Math.random() * 2)]];
+    // set dilute 
+    if (this.color !== "white" && Object.values(dilutions).includes(this.color)) {
+      this.genes.set("dilute", traitMappings["dilute"][0]);
+    } else {
+      this.genes.set("dilute", traitMappings["non-dilute"][Math.floor(Math.random() * traitMappings["non-dilute"].length)]);
     }
-        
-    // Colour point inheritance 
-    if (this.genes.colorpoint.length === 0) {
-      if (this.coatPatterns.includes("colorpoint")) {
-        this.genes.colorpoint = ["cs", ["cs", "cb"][Math.floor(Math.random() * 2)]];
-      } else if (this.coatPatterns.includes("mink")) {
-        this.genes.colorpoint = ["cs", "cb"];
-      } else if (this.coatPatterns.includes("sepia")) {
-        this.genes.colorpoint = ["cb", "cb"];
+
+    // set agouti (tabby)
+    if (this.coatPatterns.includes("tabby")) {
+      this.genes.set("agouti", traitMappings["tabby"][Math.floor(Math.random() * traitMappings["tabby"].length)]);
+    } 
+
+    // set white, orange, brown 
+    if (this.color === "white") {
+      this.genes.set("white", traitMappings["white"][Math.floor(Math.random() * traitMappings["white"].length)]);
+      // randomize orange, brown, and dilute       
+      if (this.xy == "XX") {
+        let choices = traitMappings["non-orange-xx"].concat(traitMappings["tortoiseshell"]);
+        this.genes.set("orange", choices[Math.floor(Math.random() * choices.length)]);
       } else {
-        // for simplicity, this assumes that random adult cats without visible points aren't carriers 
-        this.genes.colorpoint = ["C", "C"];
+        let choices = traitMappings["non-orange-xy"].concat(traitMappings["orange"]);
+        this.genes.set("orange", choices[Math.floor(Math.random() * choices.length)]);
       }
+      this.genes.set("brown", traitMappings["non-brown"][Math.floor(Math.random() * traitMappings["non-brown"].length)]);                
+      let choices = traitMappings["dilute"].concat(traitMappings["non-dilute"]);
+      this.genes.set("dilute", choices[Math.floor(Math.random() * choices.length)]);
+    } else if (this.color.includes("orange") || this.color.includes("cream") || this.color.includes("tortoise") || this.color.includes("calico")) {
+      // get orange 
+      if (this.color.includes("tortoiseshell") || this.color.includes("calico")) {
+        this.genes.set("orange", traitMappings["tortoiseshell"][0]); 
+      } else {
+        this.genes.set("orange", traitMappings["orange"][0]); 
+      }
+      // orange cats are always tabby even without the usual tabby gene 
+      if (!this.coatPatterns.includes("tabby")) {
+        this.coatPatterns.push("tabby");
+      }
+      // randomize brown and set white = non-white (if bicolor, this will be updated later) 
+      this.genes.set("brown", traitMappings["non-brown"][Math.floor(Math.random() * traitMappings["non-brown"].length)]);          
+      this.genes.set("white", traitMappings["non-white"][Math.floor(Math.random() * traitMappings["non-white"].length)]);          
+    } else {
+      // set brown according to provided value 
+      this.genes.set("brown", traitMappings[this.color.split(" ")[0]][Math.floor(Math.random() * traitMappings[this.color.split(" ")[0]].length)]);
+      // randomize orange (to a value that doesn't produce orange / tortie)
+      if (this.xy == "XX") {
+        this.genes.set("orange", traitMappings["non-orange-xx"][Math.floor(Math.random() * traitMappings["non-orange-xx"].length)]);          
+      } else {
+        this.genes.set("orange", traitMappings["non-orange-xy"][Math.floor(Math.random() * traitMappings["non-orange-xy"].length)]);
+      }
+      // set white = non-white 
+      this.genes.set("white", traitMappings["non-white"][Math.floor(Math.random() * traitMappings["non-white"].length)]);          
+    }
+
+    // set colorpoint 
+    // Colour point inheritance 
+    if (this.coatPatterns.includes("colorpoint")) {
+      this.genes.set("colorpoint", traitMappings["colorpoint"][Math.floor(Math.random() * traitMappings["colorpoint"].length)]);
+    } else if (this.coatPatterns.includes("mink")) {
+      this.genes.set("colorpoint", traitMappings["mink"][Math.floor(Math.random() * traitMappings["mink"].length)]);
+    } else if (this.coatPatterns.includes("sepia")) {
+      this.genes.set("colorpoint", traitMappings["sepia"][Math.floor(Math.random() * traitMappings["sepia"].length)]);
+    } else if (this.coatPatterns.includes("albino")) {
+      this.genes.set("colorpoint", traitMappings["albino"][Math.floor(Math.random() * traitMappings["albino"].length)]);
+    } else {
+      this.genes.set("colorpoint", traitMappings["non-colorpoint"][Math.floor(Math.random() * traitMappings["non-colorpoint"].length)]);
+    }
+
+    // set bicolor 
+    if (this.coatPatterns.includes("bicolor") || this.color.endsWith("and white")) {
+      this.genes.set("white", traitMappings["bicolor"][Math.floor(Math.random() * traitMappings["bicolor"].length)]);
     }
 
     // BREED-SPECIFIC STUFF 
@@ -339,26 +249,26 @@ class Cat {
       case "maine coon": 
       case "norwegian forest": 
         if (!this.coatType) {
-          this.genes.longhair = ["n", "n"];
+          this.genes.set("longhair", traitMappings["longhair"][0]);
         }
         break; 
       case "himalayan": 
       case "birman": 
       case "neva masquerade": 
         if (!this.coatType) {
-          this.genes.longhair = ["n", "n"];
+          this.genes.set("longhair", traitMappings["longhair"][0]);
         }
       case "siamese": 
       case "thai": 
       case "balinese": 
         // if the colorpoint type has been specified manually (i.e. the user inputs "colorpoint" or "mink", etc.), that should override the breed standard 
         if (!this.coatPatterns.includes("colorpoint") && !this.coatPatterns.includes("mink") && !this.coatPatterns.includes("sepia")) {
-          this.genes.colorpoint = ["cs", "cs"];
+          this.genes.set("colorpoint", traitMappings["colorpoint"][0]);
         }
         break; 
       case "burmese": 
         if (!this.coatPatterns.includes("colorpoint") && !this.coatPatterns.includes("mink") && !this.coatPatterns.includes("sepia")) {
-          this.genes.colorpoint = ["cb", "cb"];
+          this.genes.set("colorpoint", traitMappings["sepia"][0]);
         }
         break; 
       case "tonkinese": 
@@ -367,39 +277,37 @@ class Cat {
         // cs/cs x anything != cb/cb 
         // cb/cb x anything != cs/cs  
         if (!this.coatPatterns.includes("colorpoint") && !this.coatPatterns.includes("mink") && !this.coatPatterns.includes("sepia")) {
-          if (!this.coatPatterns.includes("mink") && !(this.coatPatterns.includes("colorpoint") && !(this.coatPatterns.includes("sepia")))) {
-            this.genes.colorpoint = [["cs", "cb"][Math.floor(Math.random() * 2)], ["cs", "cb"][Math.floor(Math.random() * 2)]];
-          }
+          let choices = traitMappings["colorpoint"].concat(traitMappings["mink"].concat(traitMappings["sepia"])); 
+          this.genes.set("colorpoint", choices[Math.floor(Math.random() * choices.length)]);
         }
         break; 
-      case "sphynx": 
-        this.genes.devonsphynx = ["Hr", "Hr"];
-        break; 
-      case "devon rex": 
-        this.genes.devonsphynx = ["Dr", "Dr"]
-        break; 
+      // case "sphynx": 
+      //   this.genes.devonsphynx = ["Hr", "Hr"];
+      //   break; 
+      // case "devon rex": 
+      //   this.genes.devonsphynx = ["Dr", "Dr"]
+      //   break; 
       }
 
     
   }
   // Retrieves the set of genes this parent will provide to a kitten. 
-  getKittenGenes(): GeneProfile {
-    let kittenGenes : GeneProfile = {
-      xy: [],
-      orange: [],
-      brown: [],
-      dilute: [],
-      white: [],
-      longhair: [],
-      agouti: [], 
-      colorpoint: [], 
-    };
-    for (let key of Object.keys(kittenGenes)) {
-      let k = key as keyof GeneProfile; 
-      if (this.genes[k] && this.genes[k].length > 0) {
-        // choose one of the available alleles at random 
-        kittenGenes[k] = []; 
-        kittenGenes[k].push(this.genes[k][Math.floor(Math.random() * this.genes[k].length)])
+  getKittenGenes(): Map<string, string[]> {
+    let kittenGenes : Map<string, string[]> = new Map(
+      [
+        ["xy", []],
+        ["orange", []], 
+        ["brown", []],
+        ["dilute", []],
+        ["white", []],
+        ["longhair", []],
+        ["agouti", []],
+        ["colorpoint", []]
+      ]
+    )
+    for (let key of kittenGenes.keys()) {
+      if (this.genes.get(key)) {
+        kittenGenes.set(key, [this.genes.get(key)![Math.floor(Math.random() * this.genes.get(key)!.length)]]);
       }
     }
     return kittenGenes;
@@ -407,22 +315,15 @@ class Cat {
 
   // Given another Cat, produces a kitten with genes from each parent. 
   makeKittenWith(mate: Cat, kittenName?: string): Cat {
-    let dad; 
-    let mom; 
-    if (this.sex === "XX" && mate.sex === "XY") {
-      dad = mate; 
-      mom = this; 
-    } else if (this.sex === "XY" && mate.sex === "XX") {
-      dad = this; 
-      mom = mate; 
+    if ((this.xy === "XX" && mate.xy === "XY") || (this.xy === "XY" && mate.xy === "XX")) {
+      let kitten = new Cat(this, mate);
+      if (kittenName) {
+        kitten.setName(kittenName);
+      } 
+      return kitten;   
     } else {
       throw new Error(`Error: unable to make kitten without one XX parent and one XY parent.`);
     }
-    let kitten = new Cat(dad, mom);
-    if (kittenName) {
-      kitten.setName(kittenName);
-    } 
-    return kitten; 
   }
 
 }

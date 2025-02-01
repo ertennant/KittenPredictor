@@ -47,6 +47,7 @@ export default function ComboBox({options, selectOption, placeholder, size, html
     >
       <div className={"relative" + (size == "lg" ? " text-xl" : "")}>
         <input id={htmlID ?? ""} 
+          name={traitType ? htmlID + '-' + traitType : htmlID}
           onChange={updateValue} 
           onKeyUp={e => e.key == 'Enter' ? handleSelect(e) : ""} 
           className={"bg-transparent outline-none" + (size == "lg" ? " p-2 w-56" : " py-1 px-2 w-20")} 

@@ -14,6 +14,8 @@ export default {
         // accent variants: for buttons, borders, etc. 
         accent: "rgb(var(--accent))",
         'accent-light': "rgb(var(--accent-light))",
+        'accent-cyan': "rgb(var(--accent-cyan))",
+        'accent-lightest': "rgb(var(--accent-lightest))",
         // custom background colors for single-colour cats 
         gray: "rgb(var(--gray))",
         orange: "rgb(var(--orange))",

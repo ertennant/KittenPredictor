@@ -23,12 +23,12 @@ export default function KittenProfile({cat}: KittenProfileProps) {
           <button 
             type="button"
             className="h-min align-middle absolute right-2" 
-            title={cat.sex === "XX" ? "Female" : "Male"} 
+            title={cat.xy === "XX" ? "Female" : "Male"} 
             disabled
           >
             <Image
-              src={cat.sex === "XX" ? "./female.svg" : "./male.svg"}
-              alt={cat.sex ?? ""}
+              src={cat.xy === "XX" ? "./female.svg" : "./male.svg"}
+              alt={cat.xy ?? ""}
               width={28}
               height={28}
             >

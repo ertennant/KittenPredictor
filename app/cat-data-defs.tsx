@@ -194,6 +194,45 @@ export const genes : { [key: string]: string[] } = {
   "Longhair": ["LL", "Ll", "ll"]
 }
 
+// Mapping of allele string -> array of alleles 
+export const alleleMappings : { [key: string]: string[] } = {
+  "XX": ["X", "X"],
+  "XY": ["X", "Y"],
+  "WW": ["W", "W"],
+  "WS": ["W", "S"],
+  "Ww": ["W", "w"],
+  "SS": ["S", "S"],
+  "Ss": ["S", "s"],
+  "ww": ["w", "w"],
+  "OO": ["O", "O"],
+  "Oo": ["O", "o"],
+  "oo": ["o", "o"],
+  "O": ["O"],
+  "o": ["o"],
+  "BB": ["B", "B"],
+  "Bb": ["B", "b"],
+  "Bbl": ["B", "bl"],
+  "bb": ["b", "b"],
+  "bbl": ["b", "bl"],
+  "blbl": ["bl", "bl"],
+  "DD": ["D", "D"],
+  "Dd": ["D", "d"],
+  "dd": ["d", "d"],
+  "AA": ["A", "A"],
+  "Aa": ["A", "a"],
+  "aa": ["a", "a"],
+  "CC": ["C", "C"], 
+  "Ccs": ["C", "cs"], 
+  "Ccb": ["C", "cb"], 
+  "cscs": ["cs", "cs"], 
+  "cscb": ["cs", "cb"], 
+  "cbcb": ["cb", "cb"], 
+  "cc": ["c", "c"], 
+  "LL": ["L", "L"], 
+  "Ll": ["L", "l"], 
+  "ll": ["l", "l"], 
+}
+
 // Explanations to show the user what each gene does. The current ordering is intended to be the most intuitive for teaching the user how they interact. 
 // TODO: add rex and hairless
 export const tooltips : { [key: string]: string} = {
@@ -243,4 +282,33 @@ export const geneMappings : { [key: string]: string } = {
   "LL": "shorthair",
   "Ll": "shorthair",
   "ll": "longhair",
+}
+
+export const traitMappings : { [key: string]: string[][]} = {
+  "white": [["W", "W"], ["W", "w"], ["W", "S"]],
+  "bicolor": [["S", "S"], ["S", "s"]],
+  "non-white": [["w", "w"]],
+  "chocolate": [["b", "b"], ["b", "bl"]],
+  "lilac": [["b", "b"], ["b", "bl"]],
+  "cinnamon": [["bl", "bl"]],
+  "fawn": [["bl", "bl"]],
+  "black": [["B", "B"], ["B", "b"], ["B", "bl"]],
+  "non-brown": [["B", "B"], ["B", "b"], ["B", "bl"], ["b", "b"], ["b", "bl"], ["bl", "bl"]],
+  "orange": [["O"]],
+  "cream": [["O"]],
+  "non-orange-xy": [["o"]],
+  "non-orange-xx": [["o", "o"]],
+  "tortoiseshell": [["O", "o"]],
+  "dilute tortoiseshell": [["O", "o"]],
+  "calico": [["O", "o"]],
+  "tabby": [["A", "A"], ["A", "a"]], 
+  "longhair": [["l", "l"]],
+  "shorthair": [["L", "L"], ["L", "l"]], 
+  "dilute": [["d", "d"]],
+  "non-dilute": [["D", "D"], ["D", "d"]],
+  "colorpoint": [["cs", "cs"]],
+  "mink": [["cs", "cb"]],
+  "sepia": [["cb", "cb"]],
+  "albino": [["c", "c"]],
+  "non-colorpoint": [["C", "C"], ["C", "cs"], ["C", "cb"], ["C", "c"]]
 }

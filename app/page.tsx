@@ -5,6 +5,7 @@ import KittenProfile from '@/app/components/kitten-profile';
 import Cat from '@/app/cat';
 
 import { useState } from 'react';
+import KittenControls from './components/kitten-controls';
 export default function Predict() {
   const [kittens, setKittens] = useState<Cat[]>([]);
   
@@ -46,35 +47,14 @@ export default function Predict() {
 
   return (
     <div>
-      <form className="flex flex-col justify-center items-center" onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
+        <KittenControls>
+        </KittenControls>
         <div className="flex flex-row justify-center" >          
           <ParentCatProfile
             parentID="F"
           >
           </ParentCatProfile>
-          <div className="my-1 flex flex-col justify-center items-center gap-2">
-            <div>
-              <label
-                htmlFor="litterSize"
-              >Number of Kittens: </label>
-              <input
-                className="rounded-md bg-white/70 p-2 border-2 border-accent-light"
-                type="number"
-                name="litterSize"
-                id="litterSize"
-                min={1}
-                max={10}
-                defaultValue={4}
-              >
-              </input>
-            </div>
-            <input
-              className="rounded-2xl p-2 cursor-pointer bg-accent hover:bg-accent-light active:shadow-inner hover:bg-accent-light hover:scale-110 transition duration-700 ease-in-out"
-              type="submit"
-              value="Generate Kittens"
-            >
-            </input>
-          </div>
           <ParentCatProfile
             parentID="M"
           >
