@@ -10,9 +10,11 @@ type AppProps = {
   catID: string, 
   options: string[],
   onUpdate: any, 
+  readOnly?: boolean, 
+  initValue?: string, 
 }
 
-export default function GeneInput({catID, title, name, options, onUpdate}: AppProps) {
+export default function GeneInput({catID, title, name, options, onUpdate, readOnly, initValue}: AppProps) {
   const [showTooltip, setShowTooltip] = useState(false);
 
   return (
@@ -45,6 +47,8 @@ export default function GeneInput({catID, title, name, options, onUpdate}: AppPr
         selectOption={onUpdate}
         size={"md"}
         reuseCombobox={false}
+        readOnly={readOnly}
+        initValue={initValue}
       >
       </ComboBox>
       <ToolTip

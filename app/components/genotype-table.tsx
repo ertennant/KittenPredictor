@@ -1,16 +1,19 @@
 import GeneInput from "./gene-input";
 import { SetStateAction, useState } from "react";
 import { genes } from "../cat-data-defs"; 
-import { convertToPhenoType } from "../genotype";
+import { combineAlleles, convertToPhenoType } from "../genotype";
 import CatDataItem from "./cat-data-item";
 import Image from "next/image";
+import Cat from "../cat";
 
 type AppProps = {
-  catName: string, 
   catID: string, 
+  readOnly?: boolean, 
+  catName?: string, 
+  cat?: Cat, 
 }
 
-export default function GenotypeTable({catID, catName}: AppProps) {
+export default function GenotypeTable({catID, catName, cat, readOnly}: AppProps) {
   const [genotype, setGenotype] : [Map<string, string>, React.Dispatch<SetStateAction<Map<string, string>>>] = useState(
     new Map([
       ["white", ""],
@@ -36,10 +39,10 @@ export default function GenotypeTable({catID, catName}: AppProps) {
   return (
     <div className="rounded-2xl p-2 border border-white bg-white/70 backdrop-blur-md">
       <h1 className="font-extrabold text-lg w-full">
-        {catName}
+        {catName ?? cat?.name ?? "Cat"}
         <Image
-          src={catID == "F" ? "./male.svg" : "./female.svg"}
-          alt={catID == "F" ? "male" : "female"}
+          src={(catID == "F" || cat?.xy == "XY") ? "./male.svg" : "./female.svg"}
+          alt={(catID == "F" || cat?.xy == "XY") ? "male" : "female"}
           height={16}
           width={16}
           className="inline align-text-bottom"
@@ -49,7 +52,21 @@ export default function GenotypeTable({catID, catName}: AppProps) {
       <div className="flex flex-row justify-between ">
         <div className="flex flex-col w-52">
           <h2 className="font-bold">Genotypes</h2>
-          {
+          { cat ? 
+            Array.from(cat.genes.entries()).map(entry => 
+              <GeneInput
+                key={entry[0]}
+                title={entry[0]}
+                catID={catID}
+                name={entry[0].toLowerCase()}
+                options={[]}
+                onUpdate={undefined}
+                readOnly={true}
+                initValue={entry[1].join("")}
+              >
+              </GeneInput>
+            )
+            : 
             Object.entries(genes).map(entry => 
               <GeneInput
                 key={entry[0]}
@@ -58,6 +75,7 @@ export default function GenotypeTable({catID, catName}: AppProps) {
                 name={entry[0].toLowerCase()}
                 options={entry[1]}
                 onUpdate={updatePhenotype}
+                readOnly={false}
               >
               </GeneInput>
             )
@@ -66,7 +84,7 @@ export default function GenotypeTable({catID, catName}: AppProps) {
         <div className="flex flex-col w-52 ml-4">
           <h2 className="font-bold">Phenotypes</h2>
           {
-            convertToPhenoType(genotype).entries().toArray().map(entry => 
+            Array.from(convertToPhenoType(cat ? combineAlleles(cat.genes) : genotype).entries()).filter(entry => entry[0] != "xy").map(entry => 
               entry[1] ?
               <CatDataItem
                 key={"phen-" + entry[0]}

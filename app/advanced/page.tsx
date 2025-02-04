@@ -12,7 +12,7 @@ export default function AdvancedPredict() {
   // Use provided parent cat data to generate kittens. 
   function handleSubmit(event: any) {
     event.preventDefault(); 
-    console.log(`called handleSubmit()`);
+    // console.log(`called handleSubmit()`);
 
     let fGenes : Map<string, string> = new Map();
     fGenes.set("xy", "XY");
@@ -36,13 +36,13 @@ export default function AdvancedPredict() {
       "XY", 
       fGenes
     )
-    console.log(father);
+    // console.log(father);
     let mother = new Cat(
       event.currentTarget.elements["M-name"]?.value ?? "Mother", 
       "XX", 
       mGenes
     )
-    console.log(mother);
+    // console.log(mother);
     let newKittens : Cat[] = []; 
     for (let i = 0; i < parseInt(event.currentTarget.litterSize.value); i++) {
       newKittens.push(father.makeKittenWith(mother, `Kitten ${i + 1}`));
@@ -61,21 +61,25 @@ export default function AdvancedPredict() {
           <GenotypeTable
             catName="Father" 
             catID="F"
-          >
+            readOnly={false}
+            >
           </GenotypeTable>
           <GenotypeTable
             catName="Mother"
             catID="M"
+            readOnly={false}
           >
           </GenotypeTable>
         </div>
       </form>
-      <div className="flex flex-row justify-center flex-wrap">
+      <div className="flex flex-row justify-center gap-6 pt-6 flex-wrap">
         {kittens.length > 0 ? kittens.map(k => 
-          <KittenProfile
+          <GenotypeTable
             key={k.name}
+            catID={"K" + k}
             cat={k}
-          ></KittenProfile>
+            readOnly={true}
+          ></GenotypeTable>
         )
         : ""}
       </div>
