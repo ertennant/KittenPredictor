@@ -8,6 +8,7 @@ import { useState } from 'react';
 import KittenControls from './components/kitten-controls';
 export default function Predict() {
   const [kittens, setKittens] = useState<Cat[]>([]);
+  const [activeMenuID, setActiveMenuID] = useState(undefined);
   
   function handleSubmit(event: any) {
     event.preventDefault(); 
@@ -53,10 +54,14 @@ export default function Predict() {
         <div className="flex flex-row justify-center" >          
           <ParentCatProfile
             parentID="F"
+            activeMenuID={activeMenuID}
+            updateActiveMenu={setActiveMenuID}
           >
           </ParentCatProfile>
           <ParentCatProfile
             parentID="M"
+            activeMenuID={activeMenuID}
+            updateActiveMenu={setActiveMenuID}
           >
           </ParentCatProfile>
         </div>

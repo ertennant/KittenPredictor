@@ -10,11 +10,14 @@ type AppProps = {
   catID: string, 
   options: string[],
   onUpdate: any, 
+  isOpen?: boolean, 
+  onOpen?: any, 
+  onClick?: any, 
   readOnly?: boolean, 
   initValue?: string, 
 }
 
-export default function GeneInput({catID, title, name, options, onUpdate, readOnly, initValue}: AppProps) {
+export default function GeneInput({catID, title, name, options, onUpdate, isOpen, readOnly, onOpen, initValue}: AppProps) {
   const [showTooltip, setShowTooltip] = useState(false);
 
   return (
@@ -27,17 +30,20 @@ export default function GeneInput({catID, title, name, options, onUpdate, readOn
         htmlFor={catID + "-gen-" + name}
       >
         {title}
-        <Image
-          src="./question.svg"
-          alt="show explanation"
-          height={16}
-          width={16}
-          onMouseEnter={e => setShowTooltip(true)}
-          onMouseLeave={e => setShowTooltip(false)}
-          onTouchStart={e => setShowTooltip(!showTooltip)} 
-          className="inline align-text-bottom mx-1 cursor-pointer"
-        >
-        </Image>
+        {!readOnly ? 
+          <Image
+            src="./question.svg"
+            alt="show explanation"
+            height={16}
+            width={16}
+            onMouseEnter={e => setShowTooltip(true)}
+            onMouseLeave={e => setShowTooltip(false)}
+            onTouchStart={e => setShowTooltip(!showTooltip)} 
+            className="inline align-text-bottom mx-1 cursor-pointer"
+          >
+          </Image>
+          : ""
+        }
       </label>
       <ComboBox
         htmlID={catID + "-gen-" + name}
@@ -45,17 +51,22 @@ export default function GeneInput({catID, title, name, options, onUpdate, readOn
         placeholder={options[0]}
         options={options}
         selectOption={onUpdate}
+        onOpen={onOpen}
+        isOpen={isOpen}
         size={"md"}
         reuseCombobox={false}
         readOnly={readOnly}
         initValue={initValue}
       >
       </ComboBox>
-      <ToolTip
-        isVisible={showTooltip}
-        text={tooltips[title]}
-      >
-      </ToolTip>
+      {!readOnly ? 
+        <ToolTip
+          isVisible={showTooltip}
+          text={tooltips[title]}
+        >
+        </ToolTip>
+        : ""
+      }
     </div>
   )
 }

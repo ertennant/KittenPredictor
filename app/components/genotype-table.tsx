@@ -11,9 +11,11 @@ type AppProps = {
   readOnly?: boolean, 
   catName?: string, 
   cat?: Cat, 
+  activeMenuID?: string, 
+  updateActiveMenu?: any, 
 }
 
-export default function GenotypeTable({catID, catName, cat, readOnly}: AppProps) {
+export default function GenotypeTable({catID, catName, cat, readOnly, updateActiveMenu, activeMenuID}: AppProps) {
   const [genotype, setGenotype] : [Map<string, string>, React.Dispatch<SetStateAction<Map<string, string>>>] = useState(
     new Map([
       ["white", ""],
@@ -26,14 +28,18 @@ export default function GenotypeTable({catID, catName, cat, readOnly}: AppProps)
     ])
   );
 
-  function updatePhenotype(event: any) {    
-    let k = event.currentTarget.id.split('-')[2];
-    let v = event.currentTarget.id.split('-')[1]; 
-    console.log(`k = ${k}, v = ${v}`);
+  function handleOpen(event: any) {
+    console.log(catID);
+    console.log()
+    console.log(catID + "-gen-" + event.currentTarget.title);
+    updateActiveMenu(catID + "-gen-" + event.currentTarget.title);
+  }
+
+  function updatePhenotype(pair: string, value: string) {
+    // console.log(`pair = ${pair}, value = ${value}`);
     let updated = new Map(genotype);
-    updated.set(k, v);
+    updated.set(pair, value);
     setGenotype(updated);
-    // console.log(genotype);
   }
 
   return (
@@ -76,6 +82,8 @@ export default function GenotypeTable({catID, catName, cat, readOnly}: AppProps)
                 options={entry[1]}
                 onUpdate={updatePhenotype}
                 readOnly={false}
+                isOpen={activeMenuID === catID + "-gen-" + entry[0]}
+                onOpen={() => (activeMenuID !== catID + "-gen-" + entry[0] ? updateActiveMenu(catID + "-gen-" + entry[0]) : updateActiveMenu(undefined))}
               >
               </GeneInput>
             )

@@ -8,11 +8,11 @@ import { useState } from 'react';
 
 export default function AdvancedPredict() {
   const [kittens, setKittens] = useState<Cat[]>([]);
+  const [activeMenuID, setActiveMenuID] = useState(undefined);
 
   // Use provided parent cat data to generate kittens. 
   function handleSubmit(event: any) {
     event.preventDefault(); 
-    // console.log(`called handleSubmit()`);
 
     let fGenes : Map<string, string> = new Map();
     fGenes.set("xy", "XY");
@@ -20,7 +20,6 @@ export default function AdvancedPredict() {
     mGenes.set("xy", "XX");
 
     for (let element of event.currentTarget.elements) {
-      // console.log(element.id);
       if (element.id.includes("F-gen")) {
         fGenes.set(element.name.split('-')[2], element.value); 
       } else if (element.id.includes("M-gen")) {
@@ -28,21 +27,16 @@ export default function AdvancedPredict() {
       }
     }
 
-    // console.log(fGenes);
-    // console.log(mGenes);
-
     let father = new Cat(
       event.currentTarget.elements["F-name"]?.value ?? "Father", 
       "XY", 
       fGenes
     )
-    // console.log(father);
     let mother = new Cat(
       event.currentTarget.elements["M-name"]?.value ?? "Mother", 
       "XX", 
       mGenes
     )
-    // console.log(mother);
     let newKittens : Cat[] = []; 
     for (let i = 0; i < parseInt(event.currentTarget.litterSize.value); i++) {
       newKittens.push(father.makeKittenWith(mother, `Kitten ${i + 1}`));
@@ -62,12 +56,16 @@ export default function AdvancedPredict() {
             catName="Father" 
             catID="F"
             readOnly={false}
+            activeMenuID={activeMenuID}
+            updateActiveMenu={setActiveMenuID}
             >
           </GenotypeTable>
           <GenotypeTable
             catName="Mother"
             catID="M"
             readOnly={false}
+            activeMenuID={activeMenuID}
+            updateActiveMenu={setActiveMenuID}
           >
           </GenotypeTable>
         </div>

@@ -5,19 +5,29 @@ import ComboBox from "./combobox";
 import { colors, coatPatterns, coatTypes, breeds } from "../cat-data-defs";
 
 type AppProps = {
-  parentID: string 
+  parentID: string, 
+  activeMenuID: string | undefined, 
+  updateActiveMenu: any, 
 }
 
-export default function ParentCatProfile({parentID}: AppProps) {
+export default function ParentCatProfile({parentID, activeMenuID, updateActiveMenu}: AppProps) {
   const [name, setName] : [string, React.Dispatch<SetStateAction<string>>] = useState("");
   const [traits, setTraits] : [Map<string, string>, React.Dispatch<SetStateAction<Map<string, string>>>] = useState(
     new Map([
       ["sex", parentID === "F" ? "XY" : "XX"] 
     ])
   );
+
+  function updateName(event: any) {
+    event.stopPropagation(); 
+    if (event.key === "Enter") {
+      event.preventDefault(); 
+    }
+    setName(event.currentTarget.value);
+  }
   
-  function updateTraits(event: any) {
-    let trait = event.currentTarget.id.slice(3);
+  function updateTraits(trait: string) {
+    // let trait = event.currentTarget.id.slice(3);
     if (traits.has(trait)) {
       return; 
     }
@@ -55,11 +65,11 @@ export default function ParentCatProfile({parentID}: AppProps) {
         <input
           type="text"
           name={parentID + "-name"}
-          className="h-min bg-transparent outline-0"
+          className="h-min bg-transparent outline-none"
           value={name}
           autoComplete="off"
           placeholder={parentID === "F" ? "Father" : "Mother"}
-          onChange={e => setName(e.currentTarget.value)}
+          onChange={updateName}
         >
         </input>
         <Image
@@ -86,10 +96,13 @@ export default function ParentCatProfile({parentID}: AppProps) {
       <ComboBox
         options={colors.concat(coatTypes, coatPatterns, breeds)}
         selectOption={updateTraits}
+        readOnly={false}
         size="lg"
         htmlID={parentID + "-traitInput"}
         placeholder="Enter Trait"
         reuseCombobox={true} 
+        isOpen={activeMenuID === parentID + "-traitInput"}
+        onOpen={() => (activeMenuID !== parentID + "-traitInput" ? updateActiveMenu(parentID + "-traitInput") : updateActiveMenu(undefined))}
       >
       </ComboBox>
     </div>

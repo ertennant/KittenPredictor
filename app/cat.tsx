@@ -307,9 +307,14 @@ class Cat {
     )
     for (let key of kittenGenes.keys()) {
       if (this.genes.get(key)) {
+        if (key === "orange" && this.genes.has("xy") && this.genes.get("xy")!.includes("Y") && kittenGenes.get("xy")!.includes("Y")) {
+          // father doesn't give X chromosome to male offspring, so he doesn't pass down the orange gene either 
+          continue; 
+        }
         kittenGenes.set(key, [this.genes.get(key)![Math.floor(Math.random() * this.genes.get(key)!.length)]]);
       }
     }
+    console.log(kittenGenes);
     return kittenGenes;
   }
 
