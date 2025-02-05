@@ -1,9 +1,9 @@
 "use client";
 
 import Cat from '@/app/cat';
-import GenotypeTable from '../components/genotype-table';
-import KittenControls from '../components/kitten-controls';
-import KittenProfile from '../components/kitten-profile';
+import GenotypeTable from './components/genotype-table';
+import KittenControls from './components/kitten-controls';
+import KittenProfile from './components/kitten-profile';
 import { useState } from 'react';
 
 export default function AdvancedPredict() {

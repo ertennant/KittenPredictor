@@ -6,75 +6,27 @@ import Cat from '@/app/cat';
 
 import { useState } from 'react';
 import KittenControls from './components/kitten-controls';
+import BasicPredict from './basic-predict';
+import AdvancedPredict from './advanced-predict';
 export default function Predict() {
-  const [kittens, setKittens] = useState<Cat[]>([]);
-  const [activeMenuID, setActiveMenuID] = useState(undefined);
-  
-  function handleSubmit(event: any) {
-    event.preventDefault(); 
-    let fTraits : string[] = []; 
-    let mTraits : string[]  = []; 
-    for (let element of event.currentTarget.elements) {
-      if (element.id.includes("F-trait")) {
-        fTraits.push(element.value);
-      } else if (element.id.includes("M-trait")) {
-        mTraits.push(element.value);
-      }
-    }
-    console.log(fTraits);
-    // stop user from submitting empty parent cats
-    if (fTraits.length === 0 || mTraits.length === 0) {
-      return; 
-    }
-    
-    let father = new Cat(
-      event.currentTarget.elements["F-name"].value ?? "Father", 
-      "XY", 
-      fTraits
-    )
-    let mother = new Cat(
-      event.currentTarget.elements["M-name"].value ?? "Mother", 
-      "XX", 
-      mTraits
-    )
-    console.log(father);
-    console.log(mother);
-    let newKittens : Cat[] = []; 
-    for (let i = 0; i < parseInt(event.currentTarget.litterSize.value); i++) {
-      newKittens.push(father.makeKittenWith(mother, `Kitten ${i + 1}`));
-    }
-    setKittens(newKittens);
-  }
+  const [mode, setMode] = useState("basic");
+
+
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        <KittenControls>
-        </KittenControls>
-        <div className="flex flex-row justify-center" >          
-          <ParentCatProfile
-            parentID="F"
-            activeMenuID={activeMenuID}
-            updateActiveMenu={setActiveMenuID}
-          >
-          </ParentCatProfile>
-          <ParentCatProfile
-            parentID="M"
-            activeMenuID={activeMenuID}
-            updateActiveMenu={setActiveMenuID}
-          >
-          </ParentCatProfile>
-        </div>
-      </form>
-      <div className="flex flex-row justify-center flex-wrap">
-        {kittens.length > 0 ? kittens.map(k => 
-          <KittenProfile
-            key={k.name}
-            cat={k}
-          ></KittenProfile>
-        )
-        : ""}
-      </div>
+      <nav className="sticky top-0 w-full bg-white/90 h-10 shadow-md shadow-black" style={{"zIndex": 100}}>
+        <button onClick={() => setMode("basic")} className="p-2 h-10 hover:bg-white">Kitten Predictor</button>
+        <button onClick={() => setMode("advanced")} className="p-2 h-10 hover:bg-white">Advanced Mode</button>
+      </nav>
+      {mode === "basic" ? 
+        <BasicPredict>          
+        </BasicPredict> : 
+        mode === "advanced" ? 
+        <AdvancedPredict>
+        </AdvancedPredict> :
+        ""
+      }
     </div>
   )
 }

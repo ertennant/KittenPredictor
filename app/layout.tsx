@@ -29,10 +29,6 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <nav className="sticky top-0 w-full bg-white/90 p-2 h-10 shadow-md shadow-black" style={{"zIndex": 100}}>
-          <a href="/" className="p-2 h-10 hover:bg-white">Kitten Predictor</a>
-          <a href="/advanced" className="p-2 h-10 hover:bg-white">Advanced Mode</a>
-        </nav>
         {children}
         <footer className='absolute bottom-0 flex flex-row justify-between items-center w-full text-center'>
           <div className="w-[24px]"></div>
