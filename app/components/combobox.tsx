@@ -35,7 +35,7 @@ export default function ComboBox({options, isOpen, onOpen, selectOption, placeho
   function handleSelect(event: any) {
     console.log(event.currentTarget);
     if (!readOnly) {
-      let k: string;  
+      let k: string | undefined;  
       let v = event.currentTarget.id.split('-')[1]; 
       if (reuseCombobox) {
         k = v; 

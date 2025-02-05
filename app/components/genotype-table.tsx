@@ -57,7 +57,7 @@ export default function GenotypeTable({catID, catName, cat, readOnly, updateActi
       </h1>
       <div className="flex flex-row justify-between ">
         <div className="flex flex-col w-52">
-          <h2 className="font-bold">Genotypes</h2>
+          <h2 className="font-bold">Genes</h2>
           { cat ? 
             Array.from(cat.genes.entries()).map(entry => 
               <GeneInput
@@ -90,7 +90,7 @@ export default function GenotypeTable({catID, catName, cat, readOnly, updateActi
           }
         </div>
         <div className="flex flex-col w-52 ml-4">
-          <h2 className="font-bold">Phenotypes</h2>
+          <h2 className="font-bold">Phenotype</h2>
           {
             Array.from(convertToPhenoType(cat ? combineAlleles(cat.genes) : genotype).entries()).filter(entry => entry[0] != "xy").map(entry => 
               entry[1] ?
