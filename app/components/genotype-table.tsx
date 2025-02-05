@@ -13,9 +13,10 @@ type AppProps = {
   cat?: Cat, 
   activeMenuID?: string, 
   updateActiveMenu?: any, 
+  className?: string,
 }
 
-export default function GenotypeTable({catID, catName, cat, readOnly, updateActiveMenu, activeMenuID}: AppProps) {
+export default function GenotypeTable({catID, catName, cat, readOnly, updateActiveMenu, activeMenuID, className}: AppProps) {
   const [genotype, setGenotype] : [Map<string, string>, React.Dispatch<SetStateAction<Map<string, string>>>] = useState(
     new Map([
       ["white", ""],
@@ -43,7 +44,7 @@ export default function GenotypeTable({catID, catName, cat, readOnly, updateActi
   }
 
   return (
-    <div className="rounded-2xl p-2 border border-white bg-white/70 backdrop-blur-md">
+    <div className={className + " " + "rounded-2xl p-2 border border-white bg-white/70 backdrop-blur-md"}>
       <h1 className="font-extrabold text-lg w-full">
         {catName ?? cat?.name ?? "Cat"}
         <Image

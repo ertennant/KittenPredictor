@@ -22,7 +22,6 @@ export default function ComboBox({options, isOpen, onOpen, selectOption, placeho
     event.stopPropagation(); 
     if (event.key === "Enter") {
       event.preventDefault(); 
-      console.log("you hit enter");
       handleEnter(event);
     }
   }
@@ -33,7 +32,6 @@ export default function ComboBox({options, isOpen, onOpen, selectOption, placeho
   }
 
   function handleSelect(event: any) {
-    console.log(event.currentTarget);
     if (!readOnly) {
       let k: string | undefined;  
       let v = event.currentTarget.id.split('-')[1]; 
@@ -46,7 +44,6 @@ export default function ComboBox({options, isOpen, onOpen, selectOption, placeho
         selectOption(k, v);
         setCurrentValue(v);
       }
-      console.log(k, v);
       onOpen(undefined);
     }
   }
@@ -58,12 +55,10 @@ export default function ComboBox({options, isOpen, onOpen, selectOption, placeho
     if (options.includes(v)) { 
       if (reuseCombobox) {
         selectOption(v);
-        console.log(v);
         setCurrentValue("");
       } else {
         let k = traitType;
         selectOption(k, v);
-        console.log(k, v);
       }
     }
   }
