@@ -8,7 +8,7 @@ import { useState } from 'react';
 import KittenControls from './components/kitten-controls';
 import BasicPredict from './basic-predict';
 import AdvancedPredict from './advanced-predict';
-export default function Predict() {
+export default function Page() {
   const [mode, setMode] = useState("basic");
 
 
