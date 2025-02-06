@@ -1,5 +1,6 @@
-import { EventHandler, useState } from "react";
 import Image from "next/image";
+import { useState } from "react";
+
 type ComboBoxProps = {
   options: string[],
   selectOption: any | undefined,
@@ -14,7 +15,7 @@ type ComboBoxProps = {
   initValue?: string, 
 }
 
-export default function ComboBox({options, isOpen, onOpen, selectOption, placeholder, size, htmlID, reuseCombobox, traitType, readOnly, initValue}: ComboBoxProps) {
+export default function ComboBox({options, isOpen=false, onOpen, selectOption, placeholder, size, htmlID, reuseCombobox=false, traitType, readOnly=false, initValue}: ComboBoxProps) {
   let [currentValue, setCurrentValue] = useState(initValue ?? "");
 
   function updateValue(event: any) {
@@ -108,7 +109,7 @@ export default function ComboBox({options, isOpen, onOpen, selectOption, placeho
         }
       </div>
       {!readOnly && isOpen ? 
-        <ul role="listbox" className={"absolute rounded-lg border-2 border-accent-light bg-white max-h-60 overflow-scroll" + (size == "lg" ? " w-56 my-12" : " w-20 my-8")} >
+        <ul role="listbox" className={"absolute rounded-lg border-2 border-accent-light bg-white max-h-60 overflow-scroll" + (size == "lg" ? " w-60 my-11" : " w-20 my-8")} >
           {options.filter(trait => trait.toLowerCase().startsWith(currentValue.toLowerCase())).map(trait => 
             <li key={trait} id={!traitType ? "li-" + trait : "li-" + trait + '-' + traitType} onClick={handleSelect} className={"cursor-pointer p-2 my-1 hover:bg-accent-light/20 transition-colors"}>{trait}</li>
           )}

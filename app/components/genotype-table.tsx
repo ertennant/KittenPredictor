@@ -1,12 +1,13 @@
-import GeneInput from "./gene-input";
-import { SetStateAction, useState } from "react";
-import { genes } from "../cat-data-defs"; 
-import { combineAlleles, convertToPhenoType } from "../genotype";
-import CatDataItem from "./cat-data-item";
 import Image from "next/image";
-import Cat from "../cat";
+import { SetStateAction, useState } from "react";
+
 import ButtonNext from "./button-next";
 import ButtonPrev from "./button-prev";
+import Cat from "../cat";
+import { genes } from "../cat-data-defs"; 
+import CatDataItem from "./cat-data-item";
+import GeneInput from "./gene-input";
+import { combineAlleles, convertToPhenoType } from "../genotype";
 
 type AppProps = {
   catID: string, 

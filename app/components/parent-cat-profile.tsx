@@ -1,8 +1,9 @@
-import { SetStateAction, useState } from "react";
 import Image from "next/image";
+import { SetStateAction, useState } from "react";
+
+import { colors, coatPatterns, coatTypes, breeds } from "../cat-data-defs";
 import CatDataItem from "./cat-data-item";
 import ComboBox from "./combobox";
-import { colors, coatPatterns, coatTypes, breeds } from "../cat-data-defs";
 
 type AppProps = {
   parentID: string, 
@@ -12,7 +13,7 @@ type AppProps = {
 }
 
 export default function ParentCatProfile({parentID, activeMenuID, updateActiveMenu, className}: AppProps) {
-  const [name, setName] : [string, React.Dispatch<SetStateAction<string>>] = useState("");
+  const [name, setName] : [string, React.Dispatch<SetStateAction<string>>] = useState(parentID === "F" ? "Father" : "Mother");
   const [traits, setTraits] : [Map<string, string>, React.Dispatch<SetStateAction<Map<string, string>>>] = useState(
     new Map([
       ["sex", parentID === "F" ? "XY" : "XX"] 
@@ -26,7 +27,6 @@ export default function ParentCatProfile({parentID, activeMenuID, updateActiveMe
   }
   
   function updateTraits(trait: string) {
-    // let trait = event.currentTarget.id.slice(3);
     if (traits.has(trait)) {
       return; 
     }

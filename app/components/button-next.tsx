@@ -8,7 +8,7 @@ type ButtonProps = {
   size: number
 }
 
-export default function ButtonNext({className, onClick, disabled, altText, size}: ButtonProps) {
+export default function ButtonNext({className, onClick, altText, disabled=false, size=20}: ButtonProps) {
   return (
     <button 
       className={"rounded-md " + (!disabled ? "hover:bg-white/90 transition-colors duration-300 " : "") + className}

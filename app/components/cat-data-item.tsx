@@ -1,7 +1,5 @@
-import Image from "next/image"
-import { ChangeEvent } from "react";
 import { colors, catTraitCSS } from "../cat-data-defs"; 
-
+import CloseButton from "./button-close";
 
 type DataInputProps = {
   catID: string, 
@@ -12,13 +10,9 @@ type DataInputProps = {
   onChange?: any,
 }
 
-export default function CatDataItem({readOnly, catID, traitType, traitValue, onDelete, onChange}: DataInputProps) {
+export default function CatDataItem({catID, traitType, traitValue, readOnly=false, onDelete, onChange}: DataInputProps) {
   function handleDelete() {
     onDelete(traitType);
-  }
-
-  function handleChange(event: ChangeEvent) {
-    onChange(event);
   }
 
   return (
@@ -35,18 +29,14 @@ export default function CatDataItem({readOnly, catID, traitType, traitValue, onD
       >
       </input>
       {!readOnly ?
-        <button type="button" 
-          onClick={handleDelete} 
-          className="bg-white rounded-full p-1 absolute -top-2 -right-2 hover:shadow-md hover:shadow-slate-500/25"
-          >
-          <Image
-            src="./close.svg"
-            alt="remove trait"
-            width={12}
-            height={12}
-          >
-          </Image>
-        </button>
+        <CloseButton
+          className={"absolute -top-2 -right-2"}
+          altText="remove trait"
+          isVisible={true}
+          onClick={handleDelete}
+          size={12}
+        >
+        </CloseButton>
         : ""
       }
     </div>

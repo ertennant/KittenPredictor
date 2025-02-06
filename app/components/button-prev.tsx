@@ -3,12 +3,12 @@ import Image from "next/image"
 type ButtonProps = {
   className: string, 
   onClick: any,
-  disabled: boolean,  
   altText: string, 
+  disabled: boolean,  
   size: number,
 }
 
-export default function ButtonPrev({className, onClick, disabled, altText, size}: ButtonProps) {
+export default function ButtonPrev({className, onClick, altText, disabled=false, size=20}: ButtonProps) {
   return (
     <button 
       className={"rounded-md " + (!disabled ? "hover:bg-white/90 transition-colors duration-300 " : "") + className}

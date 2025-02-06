@@ -1,13 +1,14 @@
-import ComboBox from "./combobox";
-import { useState } from "react";
-import ToolTip from "./tooltip";
-import { tooltips } from "../cat-data-defs";
 import Image from "next/image";
+import { useState } from "react";
+
+import { tooltips } from "../cat-data-defs";
+import ComboBox from "./combobox";
+import ToolTip from "./tooltip";
 
 type AppProps = {
+  catID: string, 
   title: string, 
   name: string, 
-  catID: string, 
   options: string[],
   onUpdate: any, 
   isOpen?: boolean, 
@@ -17,7 +18,7 @@ type AppProps = {
   initValue?: string, 
 }
 
-export default function GeneInput({catID, title, name, options, onUpdate, isOpen, readOnly, onOpen, initValue}: AppProps) {
+export default function GeneInput({catID, title, name, options, onUpdate, isOpen=false, readOnly=false, onOpen, initValue}: AppProps) {
   const [showTooltip, setShowTooltip] = useState(false);
 
   return (
@@ -34,11 +35,12 @@ export default function GeneInput({catID, title, name, options, onUpdate, isOpen
           <Image
             src="./question.svg"
             alt="show explanation"
+            title="show explanation"
             height={16}
             width={16}
-            onMouseEnter={e => setShowTooltip(true)}
-            onMouseLeave={e => setShowTooltip(false)}
-            onTouchStart={e => setShowTooltip(!showTooltip)} 
+            onMouseEnter={() => setShowTooltip(true)}
+            onMouseLeave={window.innerWidth > 600 ? () => setShowTooltip(false) : undefined}
+            onTouchStart={() => setShowTooltip(!showTooltip)} 
             className="inline align-text-bottom mx-1 cursor-pointer"
           >
           </Image>
@@ -63,6 +65,7 @@ export default function GeneInput({catID, title, name, options, onUpdate, isOpen
         <ToolTip
           isVisible={showTooltip}
           text={tooltips[title]}
+          onClick={() => setShowTooltip(false)}
         >
         </ToolTip>
         : ""
