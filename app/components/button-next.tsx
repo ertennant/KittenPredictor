@@ -10,7 +10,8 @@ type ButtonProps = {
 export default function ButtonNext({className, onClick, altText, size}: ButtonProps) {
   return (
     <button 
-      className={className}
+      className={"hover:bg-white/90 transition-colors duration-300 rounded-md " + className}
+      title={altText}
       type="button" 
       onClick={onClick}>
       <Image

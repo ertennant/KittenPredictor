@@ -73,7 +73,7 @@ export default function AdvancedPredict() {
         </div>
         <div className="flex flex-row justify-center gap-6 pt-6 px-6 ">
           <ButtonPrev
-            className="lg:hidden"
+            className="lg:hidden pl-2"
             onClick={() => changeVisibleParent("prev")}
             altText="View Previous Cat"
             size={20}
@@ -98,7 +98,7 @@ export default function AdvancedPredict() {
           >
           </GenotypeTable>
           <ButtonNext
-            className="lg:hidden"
+            className="lg:hidden px-1"
             onClick={() => changeVisibleParent("next")}
             altText="View Next Cat"
             size={20}
@@ -108,7 +108,7 @@ export default function AdvancedPredict() {
       </form>
       <div className="flex flex-row justify-center gap-6 pt-6 flex-wrap">
         <ButtonPrev
-          className={kittens.length < 2 ? "hidden" : kittens.length < 4 ? "2xl:hidden" : ""}
+          className={kittens.length < 2 ? "hidden" : kittens.length < 4 ? "2xl:hidden pl-2" : "pl-2"}
           onClick={() => changeVisibleKitten("prev")}
           altText="View Previous Kitten"
           size={20}
@@ -127,7 +127,7 @@ export default function AdvancedPredict() {
         )
         : ""}
         <ButtonNext
-          className={kittens.length < 2 ? "hidden" : kittens.length < 4 ? "2xl:hidden" : ""}
+          className={kittens.length < 2 ? "hidden" : kittens.length < 4 ? "2xl:hidden px-1" : "px-1"}
           onClick={() => changeVisibleKitten("next")}
           altText="View Next Kitten"
           size={20}

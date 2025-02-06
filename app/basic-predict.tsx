@@ -74,7 +74,7 @@ export default function BasicPredict() {
         </KittenControls>
         <div className="flex flex-row justify-center" >          
           <ButtonPrev
-            className="md:hidden"
+            className="md:hidden pl-2"
             onClick={() => changeVisibleParent("prev")}
             altText="View Previous Cat"
             size={20}
@@ -95,7 +95,7 @@ export default function BasicPredict() {
           >
           </ParentCatProfile>
           <ButtonNext
-            className="md:hidden"
+            className="md:hidden px-1"
             onClick={() => changeVisibleParent("next")}
             altText="View Next Cat"
             size={20}
@@ -105,7 +105,7 @@ export default function BasicPredict() {
       </form>
       <div className="flex flex-row justify-center flex-wrap">
         <ButtonPrev
-          className={kittens.length < 2 ? "hidden" : kittens.length < 3 ? "md:hidden" : kittens.length < 4 ? "lg:hidden" : kittens.length < 5 ? "xl:hidden" : kittens.length < 6 ? "2xl:hidden" : ""}
+          className={kittens.length < 2 ? "hidden" : kittens.length < 3 ? "md:hidden pl-2" : kittens.length < 4 ? "lg:hidden pl-2" : kittens.length < 5 ? "xl:hidden pl-2" : kittens.length < 6 ? "2xl:hidden pl-2" : "pl-2"}
           onClick={() => changeVisibleKitten("prev")}
           altText="View Previous Kitten"
           size={20}
@@ -113,14 +113,14 @@ export default function BasicPredict() {
         </ButtonPrev>
         {kittens.length > 0 ? kittens.map((kitten, index) => 
           <KittenProfile
-            className={visibleKitten === index - 4 ? "hidden 2xl:block" : visibleKitten === index - 3 ? "hidden xl:block" : visibleKitten === index - 2 ? "hidden lg:block" : visibleKitten === index - 1 ? "hidden md:block" : visibleKitten !== index ? "hidden" : ""}
+            className={visibleKitten === index - 4 ? "hidden 2xl:block pl-2" : visibleKitten === index - 3 ? "hidden xl:block" : visibleKitten === index - 2 ? "hidden lg:block" : visibleKitten === index - 1 ? "hidden md:block" : visibleKitten !== index ? "hidden" : ""}
             key={kitten.name}
             cat={kitten}
           ></KittenProfile>
         )
         : ""}
         <ButtonNext
-          className={kittens.length < 2 ? "hidden" : kittens.length < 3 ? "md:hidden" : kittens.length < 4 ? "lg:hidden" : kittens.length < 5 ? "xl:hidden" : kittens.length < 6 ? "2xl:hidden" : ""}
+          className={kittens.length < 2 ? "hidden" : kittens.length < 3 ? "md:hidden px-1" : kittens.length < 4 ? "lg:hidden px-1" : kittens.length < 5 ? "xl:hidden px-1" : kittens.length < 6 ? "2xl:hidden px-1" : "px-1"}
           onClick={() => changeVisibleKitten("next")}
           altText="View Next Kitten"
           size={20}

@@ -5,6 +5,8 @@ import { combineAlleles, convertToPhenoType } from "../genotype";
 import CatDataItem from "./cat-data-item";
 import Image from "next/image";
 import Cat from "../cat";
+import ButtonNext from "./button-next";
+import ButtonPrev from "./button-prev";
 
 type AppProps = {
   catID: string, 
@@ -28,6 +30,15 @@ export default function GenotypeTable({catID, catName, cat, readOnly, updateActi
       ["longhair", ""]  
     ])
   );
+  const [openPanel, setOpenPanel] = useState(0);
+
+  function changeVisiblePanel(direction: string) {
+    if (direction === "next") {
+      setOpenPanel(1);
+    } else if (direction === "prev") {
+      setOpenPanel(0);
+    }
+  }
 
   function handleOpen(event: any) {
     console.log(catID);
@@ -56,8 +67,8 @@ export default function GenotypeTable({catID, catName, cat, readOnly, updateActi
         >
         </Image>
       </h1>
-      <div className="flex flex-row justify-between ">
-        <div className="flex flex-col w-52">
+      <div className="flex flex-row justify-between items-stretch ">
+        <div className={"flex flex-col w-52 mr-2 " + (openPanel === 1 ? "max-[600px]:hidden" : "")}>
           <h2 className="font-bold">Genes</h2>
           { cat ? 
             Array.from(cat.genes.entries()).map(entry => 
@@ -90,7 +101,21 @@ export default function GenotypeTable({catID, catName, cat, readOnly, updateActi
             )
           }
         </div>
-        <div className="flex flex-col w-52 ml-4">
+        <ButtonNext
+          className={openPanel === 0 ? "px-1 py-32 min-[600px]:hidden" : "hidden"}
+          altText="Show Phenotype Panel"
+          onClick={() => changeVisiblePanel("next")}
+          size={20}          
+        >
+        </ButtonNext>
+        <ButtonPrev
+          className={openPanel === 1 ? "pl-2 py-32 min-[600px]:hidden" : "hidden"}
+          altText="Show Gene Panel"
+          onClick={() => changeVisiblePanel("prev")}
+          size={20}          
+        >
+        </ButtonPrev>
+        <div className={"flex flex-col w-52 ml-4 " + (openPanel === 0 ? "max-[600px]:hidden" : "")}>
           <h2 className="font-bold">Phenotype</h2>
           {
             Array.from(convertToPhenoType(cat ? combineAlleles(cat.genes) : genotype).entries()).filter(entry => entry[0] != "xy").map(entry => 
