@@ -18,11 +18,16 @@ export default function ComboBox({options, isOpen, onOpen, selectOption, placeho
   let [currentValue, setCurrentValue] = useState(initValue ?? "");
 
   function updateValue(event: any) {
+    if (event.key !== "Enter" && !currentValue && !isOpen) {
+      onOpen(); // open dropdown menu if this is the start of new input, otherwise respect the user's decision 
+    }
     setCurrentValue(event.currentTarget.value);
     event.stopPropagation(); 
     if (event.key === "Enter") {
       event.preventDefault(); 
       handleEnter(event);
+    } else if (event.key === "Escape" && isOpen) {
+      onOpen(undefined);
     }
   }
 
@@ -35,16 +40,20 @@ export default function ComboBox({options, isOpen, onOpen, selectOption, placeho
     if (!readOnly) {
       let k: string | undefined;  
       let v = event.currentTarget.id.split('-')[1]; 
-      if (reuseCombobox) {
-        k = v; 
-        selectOption(v);
-        setCurrentValue("");
-      } else {
-        k = traitType; 
-        selectOption(k, v);
-        setCurrentValue(v);
+      if (options.includes(v)) {
+        if (reuseCombobox) {
+          k = v; 
+          selectOption(v);
+          setCurrentValue("");
+        } else {
+          k = traitType; 
+          selectOption(k, v);
+          setCurrentValue(v);
+        }
+        if (isOpen) {
+          onOpen(undefined); // close dropdown menu 
+        }
       }
-      onOpen(undefined);
     }
   }
 
@@ -59,6 +68,9 @@ export default function ComboBox({options, isOpen, onOpen, selectOption, placeho
       } else {
         let k = traitType;
         selectOption(k, v);
+      }
+      if (isOpen) {
+        onOpen(undefined);
       }
     }
   }
