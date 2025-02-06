@@ -4,7 +4,8 @@ import Cat from '@/app/cat';
 import GenotypeTable from './components/genotype-table';
 import KittenControls from './components/kitten-controls';
 import { useState } from 'react';
-import Image from 'next/image';
+import ButtonPrev from './components/button-prev';
+import ButtonNext from './components/button-next';
 
 export default function AdvancedPredict() {
   const [kittens, setKittens] = useState<Cat[]>([]); // array of kittens 
@@ -71,18 +72,13 @@ export default function AdvancedPredict() {
           </KittenControls>
         </div>
         <div className="flex flex-row justify-center gap-6 pt-6 px-6 ">
-          <button 
-            className="lg:hidden" 
-            type="button" 
-            onClick={() => changeVisibleParent("prev")}>
-            <Image
-              src="./arrow-left.svg"
-              alt="View Previous Cat"
-              height={20}
-              width={20}
-            >
-            </Image>
-          </button>
+          <ButtonPrev
+            className="lg:hidden"
+            onClick={() => changeVisibleParent("prev")}
+            altText="View Previous Cat"
+            size={20}
+          >
+          </ButtonPrev>
           <GenotypeTable
             className={visibleParent !== "F" ? "hidden lg:block" : ""}
             catName="Father" 
@@ -101,33 +97,23 @@ export default function AdvancedPredict() {
             updateActiveMenu={setActiveMenuID}
           >
           </GenotypeTable>
-          <button 
-            className="lg:hidden" 
-            type="button" 
-            onClick={() => changeVisibleParent("next")}>
-            <Image
-              src="./arrow-right.svg"
-              alt="View Next Cat"
-              height={20}
-              width={20}
-            >
-            </Image>
-          </button>        
+          <ButtonNext
+            className="lg:hidden"
+            onClick={() => changeVisibleParent("next")}
+            altText="View Next Cat"
+            size={20}
+          >
+          </ButtonNext>
         </div>
       </form>
       <div className="flex flex-row justify-center gap-6 pt-6 flex-wrap">
-        <button 
+        <ButtonPrev
           className={kittens.length < 2 ? "hidden" : kittens.length < 4 ? "2xl:hidden" : ""}
-          type="button" 
-          onClick={() => changeVisibleKitten("prev")}>
-          <Image
-            src="./arrow-left.svg"
-            alt="View Previous Cat"
-            height={20}
-            width={20}
-          >
-          </Image>
-        </button>
+          onClick={() => changeVisibleKitten("prev")}
+          altText="View Previous Kitten"
+          size={20}
+        >
+        </ButtonPrev>
         {kittens.length > 0 ? 
           kittens.map((k, index) => 
           <GenotypeTable
@@ -140,18 +126,13 @@ export default function AdvancedPredict() {
           ></GenotypeTable>
         )
         : ""}
-        <button 
+        <ButtonNext
           className={kittens.length < 2 ? "hidden" : kittens.length < 4 ? "2xl:hidden" : ""}
-          type="button" 
-          onClick={() => changeVisibleKitten("next")}>
-          <Image
-            src="./arrow-right.svg"
-            alt="View Next Cat"
-            height={20}
-            width={20}
-          >
-          </Image>
-        </button>        
+          onClick={() => changeVisibleKitten("next")}
+          altText="View Next Kitten"
+          size={20}
+        >
+        </ButtonNext>
       </div>
     </div>
   )

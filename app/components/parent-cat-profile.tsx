@@ -8,9 +8,10 @@ type AppProps = {
   parentID: string, 
   activeMenuID: string | undefined, 
   updateActiveMenu: any, 
+  className?: string, 
 }
 
-export default function ParentCatProfile({parentID, activeMenuID, updateActiveMenu}: AppProps) {
+export default function ParentCatProfile({parentID, activeMenuID, updateActiveMenu, className}: AppProps) {
   const [name, setName] : [string, React.Dispatch<SetStateAction<string>>] = useState("");
   const [traits, setTraits] : [Map<string, string>, React.Dispatch<SetStateAction<Map<string, string>>>] = useState(
     new Map([
@@ -60,7 +61,7 @@ export default function ParentCatProfile({parentID, activeMenuID, updateActiveMe
 
   return (
     // WARNING: the dropdown menu does not display correctly using Tailwind for z index, but does display correctly using element style. 
-    <div className="rounded-2xl p-6 border border-white bg-white/70 backdrop-blur-md flex flex-col items-stretch m-2" style={{zIndex: 99}}>
+    <div className={className + " " + "rounded-2xl p-6 border border-white bg-white/70 backdrop-blur-md flex flex-col items-stretch m-2"} style={{zIndex: 99}}>
       <div className={"relative rounded-2xl bg-white/20 focus-within:bg-white hover:bg-white transition-colors border-2 border-accent-light p-2 my-2 text-xl"}>
         <input
           type="text"

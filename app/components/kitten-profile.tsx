@@ -4,13 +4,14 @@ import Cat from "@/app/cat"
 import CatDataItem from "./cat-data-item"
 
 type KittenProfileProps = {
-  cat: Cat
+  cat: Cat, 
+  className?: string, 
 }
 
-export default function KittenProfile({cat}: KittenProfileProps) {
+export default function KittenProfile({cat, className}: KittenProfileProps) {
   console.log(cat);
   return (
-    <div className="flex flex-col items-center m-2">      
+    <div className={className + " " + "flex flex-col items-center m-2"}>      
       <div className="rounded-2xl p-6 border border-white bg-white/60 backdrop-blur-md flex flex-col items-stretch">
         <div className="relative rounded-2xl bg-white/70 p-2 my-2 border-2 border-slate-300 text-xl">
           <input
