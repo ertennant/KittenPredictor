@@ -20,10 +20,8 @@ export default function ParentCatProfile({parentID, activeMenuID, updateActiveMe
   );
 
   function updateName(event: any) {
+    console.log("called updateName()");
     event.stopPropagation(); 
-    if (event.key === "Enter") {
-      event.preventDefault(); 
-    }
     setName(event.currentTarget.value);
   }
   
@@ -70,6 +68,7 @@ export default function ParentCatProfile({parentID, activeMenuID, updateActiveMe
           value={name}
           autoComplete="off"
           placeholder={parentID === "F" ? "Father" : "Mother"}
+          onKeyDown={e => e.key === "Enter" ? e.preventDefault() : ""}
           onChange={updateName}
         >
         </input>
