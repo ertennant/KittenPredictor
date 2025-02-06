@@ -104,6 +104,7 @@ export default function GenotypeTable({catID, catName, cat, readOnly, updateActi
         <ButtonNext
           className={openPanel === 0 ? "px-1 py-32 min-[600px]:hidden" : "hidden"}
           altText="Show Phenotype Panel"
+          disabled={false}
           onClick={() => changeVisiblePanel("next")}
           size={20}          
         >
@@ -111,6 +112,7 @@ export default function GenotypeTable({catID, catName, cat, readOnly, updateActi
         <ButtonPrev
           className={openPanel === 1 ? "pl-2 py-32 min-[600px]:hidden" : "hidden"}
           altText="Show Gene Panel"
+          disabled={false}
           onClick={() => changeVisiblePanel("prev")}
           size={20}          
         >
@@ -127,7 +129,8 @@ export default function GenotypeTable({catID, catName, cat, readOnly, updateActi
                 traitValue={entry[1]}
               >
               </CatDataItem>
-              : ""
+              : 
+              ""
             )
           }
         </div>

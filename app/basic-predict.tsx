@@ -42,7 +42,6 @@ export default function BasicPredict() {
         mTraits.push(element.value);
       }
     }
-    // console.log(fTraits);
     // stop user from submitting empty parent cats
     if (fTraits.length === 0 || mTraits.length === 0) {
       return; 
@@ -58,8 +57,6 @@ export default function BasicPredict() {
       "XX", 
       mTraits
     )
-    // console.log(father);
-    // console.log(mother);
     let newKittens : Cat[] = []; 
     for (let i = 0; i < parseInt(event.currentTarget.litterSize.value); i++) {
       newKittens.push(father.makeKittenWith(mother, `Kitten ${i + 1}`));
@@ -75,6 +72,7 @@ export default function BasicPredict() {
         <div className="flex flex-row justify-center" >          
           <ButtonPrev
             className="md:hidden pl-2"
+            disabled={visibleParent === "F"}
             onClick={() => changeVisibleParent("prev")}
             altText="View Previous Cat"
             size={20}
@@ -96,6 +94,7 @@ export default function BasicPredict() {
           </ParentCatProfile>
           <ButtonNext
             className="md:hidden px-1"
+            disabled={visibleParent === "M"}
             onClick={() => changeVisibleParent("next")}
             altText="View Next Cat"
             size={20}
@@ -107,6 +106,7 @@ export default function BasicPredict() {
         <ButtonPrev
           className={kittens.length < 2 ? "hidden" : kittens.length < 3 ? "md:hidden pl-2" : kittens.length < 4 ? "lg:hidden pl-2" : kittens.length < 5 ? "xl:hidden pl-2" : kittens.length < 6 ? "2xl:hidden pl-2" : "pl-2"}
           onClick={() => changeVisibleKitten("prev")}
+          disabled={visibleKitten === 0}
           altText="View Previous Kitten"
           size={20}
         >
@@ -122,6 +122,7 @@ export default function BasicPredict() {
         <ButtonNext
           className={kittens.length < 2 ? "hidden" : kittens.length < 3 ? "md:hidden px-1" : kittens.length < 4 ? "lg:hidden px-1" : kittens.length < 5 ? "xl:hidden px-1" : kittens.length < 6 ? "2xl:hidden px-1" : "px-1"}
           onClick={() => changeVisibleKitten("next")}
+          disabled={visibleKitten === kittens.length - 1}
           altText="View Next Kitten"
           size={20}
         >
