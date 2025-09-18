@@ -92,7 +92,7 @@ export default function GenotypeTable({catID, catName, cat, readOnly, updateActi
                 title={entry[0]}
                 catID={catID}
                 name={entry[0].toLowerCase()}
-                options={entry[1]}
+                options={entry[0] !== "Orange" ? entry[1] : catID === "F" ? entry[1].filter(e => e.length == 1) : entry[1].filter(e => e.length == 2)}
                 onUpdate={updatePhenotype}
                 readOnly={false}
                 isOpen={activeMenuID === catID + "-gen-" + entry[0]}
