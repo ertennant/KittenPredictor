@@ -1,4 +1,4 @@
-import { colors, coatPatterns, coatTypes, breeds, traitMappings, dilutions } from "./cat-data-defs";
+import { colors, coatPatterns, coatTypes, breeds, traitMappings, dilutions, geneMappings } from "./cat-data-defs";
 import { combineAlleles, convertToPhenoType, sortAlleles, splitAlleles } from "./genotype";
 
 class Cat {
@@ -314,7 +314,7 @@ class Cat {
         kittenGenes.set(key, [this.genes.get(key)![Math.floor(Math.random() * this.genes.get(key)!.length)]]);
       }
     }
-    console.log(kittenGenes);
+    // console.log(kittenGenes);
     return kittenGenes;
   }
 
@@ -331,6 +331,78 @@ class Cat {
     }
   }
 
+  // To Do: Male/Female Orange/Tortie stuff 
+  calculateKittenProbabilities(mate: Cat) : Map<string, number> {
+    let result : Map<string, number> = new Map(); 
+    if ((this.xy === "XX" && mate.xy === "XY") || (this.xy === "XY" && mate.xy === "XX")) {
+      let dilutions : {[key: string]: string} = {"orange": "cream", "black": "gray", "chocolate": "lilac", "cinnamon": "fawn", "calico": "dilute calico", "tortoiseshell": "dilute tortoiseshell"};
+      // calculate probabilities of non-dilute colors. DO NOT CHANGE ORDERING. WHITE MUST BE CALCULATED BEFORE ORANGE. ORANGE MUST BE CALCULATED BEFORE BLACK/BROWN. 
+      for (const gene of ["white", "orange", "brown", "longhair", "dilute"]) {
+        if (mate.genes.has(gene) && this.genes.get(gene) !== undefined && mate.genes.get(gene) !== undefined) {
+          let pairs = this.punnet(this.genes.get(gene)!, mate.genes.get(gene)!);
+          console.log(pairs);
+          let count = 1.0; 
+          if (gene === "white") {
+            count = pairs.filter(e => geneMappings[e] === gene).length / pairs.length; 
+            result.set(gene, count);
+          } else if (gene === "orange") {
+            let notWhite = 1 - result.get("white")!;
+            if (notWhite > 0) {
+              count = pairs.filter(e => geneMappings[e] === "orange").length / pairs.length; 
+              result.set("orange", count * notWhite);
+              count = pairs.filter(e => geneMappings[e] === "tortoiseshell").length / pairs.length; 
+              result.set("tortoiseshell", count * notWhite);
+            } else {
+              result.set("orange", 0);
+              result.set("tortoiseshell", 0);
+            }
+          } else if (gene === "brown") {
+            let notWhiteOrOrange = (1 - result.get("white")!) * (1 - (result.get("orange")! + result.get("tortoiseshell")!));
+            if (notWhiteOrOrange > 0) {
+              count = pairs.filter(e => geneMappings[e] === "black").length / pairs.length; 
+              result.set("black", count * notWhiteOrOrange);
+              count = pairs.filter(e => geneMappings[e] === "chocolate").length / pairs.length; 
+              result.set("chocolate", count * notWhiteOrOrange);
+              count = pairs.filter(e => geneMappings[e] === "cinnamon").length / pairs.length; 
+              result.set("cinnamon", count * notWhiteOrOrange);
+            } else {
+              result.set("black", 0);
+              result.set("chocolate", 0);
+              result.set("cinnamon", 0);
+            }
+          } else if (gene === "longhair") {
+            count = pairs.filter(e => geneMappings[e] === gene).length / pairs.length; 
+            result.set("longhair", count);
+            result.set("shorthair", 1 - result.get("longhair")!);
+          } else if (gene === "dilute") {
+            count = pairs.filter(e => geneMappings[e] === gene).length / pairs.length; 
+            result.set("dilute", count);
+          }
+        }
+      }
+
+      // Extract probabilities of diluted colors from the probabilities of their non-dilute equivalents. 
+      for (const key of ["orange", "black", "chocolate", "cinnamon"]) {
+        result.set(dilutions[key], result.get("dilute")! * result.get(key)!);
+        result.set(key, result.get(key)! - result.get(dilutions[key])!);
+      }
+    }
+    return result; 
+  }
+
+  punnet(father: string[], mother: string[]): string[] {
+    let res : string[] = []; 
+    for (const f of father) {
+      for (const m of mother) {
+        res.push([f, m].sort().join(""));
+        // To deal with the X-linked Orange gene, add the single copy from the mother to the results list (to account for male kittens).
+        if (father.length == 1) {
+          res.push(m); 
+        }
+      }
+    }
+    return res; 
+  }
 }
 
 export default Cat; 
