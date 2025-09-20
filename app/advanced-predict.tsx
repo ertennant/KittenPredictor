@@ -7,9 +7,9 @@ import { useState } from 'react';
 import ButtonPrev from './components/button-prev';
 import ButtonNext from './components/button-next';
 
-export default function AdvancedPredict() {
+export default function AdvancedPredict({activeMenuID, updateActiveMenu}: any) {
   const [kittens, setKittens] = useState<Cat[]>([]); // array of kittens 
-  const [activeMenuID, setActiveMenuID] = useState(undefined); // ID of ComboBox menu currently open (to prevent more than one from being open at the same time)
+  // const [activeMenuID, setActiveMenuID] = useState(undefined); // ID of ComboBox menu currently open (to prevent more than one from being open at the same time)
   const [visibleParent, setVisibleParent] = useState("F"); // ID of parent cat currently visible (for small screens only)
   const [visibleKitten, setVisibleKitten] = useState(0); // ID of first kitten currently visible (for small screens only)
 
@@ -86,7 +86,7 @@ export default function AdvancedPredict() {
             catID="F"
             readOnly={false}
             activeMenuID={activeMenuID}
-            updateActiveMenu={setActiveMenuID}
+            updateActiveMenu={updateActiveMenu}
             >
           </GenotypeTable>
           <GenotypeTable
@@ -95,7 +95,7 @@ export default function AdvancedPredict() {
             catID="M"
             readOnly={false}
             activeMenuID={activeMenuID}
-            updateActiveMenu={setActiveMenuID}
+            updateActiveMenu={updateActiveMenu}
           >
           </GenotypeTable>
           <ButtonNext

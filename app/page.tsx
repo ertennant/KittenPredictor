@@ -4,14 +4,22 @@ import ParentCatProfile from '@/app/components/parent-cat-profile';
 import KittenProfile from '@/app/components/kitten-profile';
 import Cat from '@/app/cat';
 
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import KittenControls from './components/kitten-controls';
 import BasicPredict from './basic-predict';
 import AdvancedPredict from './advanced-predict';
 export default function Page() {
   const [mode, setMode] = useState("basic");
+  const [activeMenuID, setActiveMenuID] = useState(undefined);
 
+  const handleCloseMenus = useCallback((event: MouseEvent) => {
+    setActiveMenuID(undefined);
+  }, [activeMenuID]);
 
+  useEffect(() => {
+    document.addEventListener("click", handleCloseMenus); // this way, the user can use their keyboard to activate the simulator keys 
+    return () => document.removeEventListener("click", handleCloseMenus);
+  }, [handleCloseMenus])
 
   return (
     <div>
@@ -20,10 +28,16 @@ export default function Page() {
         <button onClick={() => setMode("advanced")} className="p-2 h-10 hover:bg-white">Advanced Mode</button>
       </nav>
       {mode === "basic" ? 
-        <BasicPredict>          
+        <BasicPredict
+          activeMenuID={activeMenuID}
+          updateActiveMenu={setActiveMenuID}
+        >          
         </BasicPredict> : 
         mode === "advanced" ? 
-        <AdvancedPredict>
+        <AdvancedPredict
+          activeMenuID={activeMenuID}
+          updateActiveMenu={setActiveMenuID}
+        >
         </AdvancedPredict> :
         ""
       }

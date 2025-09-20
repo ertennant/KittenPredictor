@@ -8,9 +8,9 @@ import { useState } from 'react';
 import KittenControls from './components/kitten-controls';
 import ButtonPrev from './components/button-prev';
 import ButtonNext from './components/button-next';
-export default function BasicPredict() {
+export default function BasicPredict({activeMenuID, updateActiveMenu}: any) {
   const [kittens, setKittens] = useState<Cat[]>([]);
-  const [activeMenuID, setActiveMenuID] = useState(undefined);
+  // const [activeMenuID, setActiveMenuID] = useState(undefined);
   const [visibleParent, setVisibleParent] = useState("F"); // ID of parent cat currently visible (for small screens only)
   const [visibleKitten, setVisibleKitten] = useState(0); // ID of first kitten currently visible (for small screens only)
 
@@ -82,14 +82,14 @@ export default function BasicPredict() {
             className={visibleParent !== "F" ? "hidden md:block" : ""}
             parentID="F"
             activeMenuID={activeMenuID}
-            updateActiveMenu={setActiveMenuID}
+            updateActiveMenu={updateActiveMenu}
           >
           </ParentCatProfile>
           <ParentCatProfile
             className={visibleParent !== "M" ? "hidden md:block" : ""}
             parentID="M"
             activeMenuID={activeMenuID}
-            updateActiveMenu={setActiveMenuID}
+            updateActiveMenu={updateActiveMenu}
           >
           </ParentCatProfile>
           <ButtonNext

@@ -19,7 +19,7 @@ export default function ComboBox({options, isOpen=false, onOpen, selectOption, p
   let [currentValue, setCurrentValue] = useState(initValue ?? "");
 
   function updateValue(event: any) {
-    if (event.key !== "Enter" && !currentValue && !isOpen) {
+    if (event.key !== "Enter" && event.key != "Escape" && !currentValue && !isOpen) {
       onOpen(); // open dropdown menu if this is the start of new input, otherwise respect the user's decision 
     }
     setCurrentValue(event.currentTarget.value);
@@ -33,6 +33,7 @@ export default function ComboBox({options, isOpen=false, onOpen, selectOption, p
   }
 
   function handleClick(event: any) {
+    event.stopPropagation(); 
     event.preventDefault(); 
     onOpen();
   }
