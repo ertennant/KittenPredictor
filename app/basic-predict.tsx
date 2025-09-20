@@ -67,7 +67,9 @@ export default function BasicPredict({activeMenuID, updateActiveMenu}: any) {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <KittenControls>
+        <KittenControls
+          outputModeList={["kittens"]}
+        >
         </KittenControls>
         <div className="flex flex-row justify-center" >          
           <ButtonPrev

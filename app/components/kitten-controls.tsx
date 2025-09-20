@@ -1,4 +1,4 @@
-export default function KittenControls() {
+export default function KittenControls({outputModeList, onChangeMode}: any) {
   return(
     <div className="sticky h-min p-2 bg-accent-lightest/80 backdrop-blur-md flex flex-row justify-start items-center gap-2">
       <div className="flex flex-row items-center">
@@ -20,8 +20,19 @@ export default function KittenControls() {
         className="rounded-xl px-2 py-1 cursor-pointer bg-accent hover:scale-110 hover:bg-accent-cyan active:shadow-inner transition duration-700 ease-in-out"
         type="submit"
         value="Generate Kittens"
+        onClick={() => onChangeMode("kittens")}
       >
       </input>
+      {
+        outputModeList.includes("probabilities") ? 
+        <input 
+          className="rounded-xl px-2 py-1 cursor-pointer bg-accent hover:scale-110 hover:bg-accent-cyan active:shadow-inner transition duration-700 ease-in-out"
+          type="submit"
+          onClick={() => onChangeMode("probabilities")}
+          value="Calculate Probabilities"
+        ></input>
+        : ""
+      }
     </div>
   )
 }

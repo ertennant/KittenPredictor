@@ -340,7 +340,6 @@ class Cat {
       for (const gene of ["white", "orange", "brown", "longhair", "dilute"]) {
         if (mate.genes.has(gene) && this.genes.get(gene) !== undefined && mate.genes.get(gene) !== undefined) {
           let pairs = this.punnet(this.genes.get(gene)!, mate.genes.get(gene)!);
-          console.log(pairs);
           let count = 1.0; 
           if (gene === "white") {
             count = pairs.filter(e => geneMappings[e] === gene).length / pairs.length; 
