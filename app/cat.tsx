@@ -2,6 +2,8 @@ import { colors, coatPatterns, coatTypes, breeds, traitMappings, dilutions } fro
 import { combineAlleles, convertToPhenoType, sortAlleles, splitAlleles } from "./genotype";
 
 class Cat {
+  static counter = 0; 
+  id: number; 
   name: string; 
   xy: string; // XX, XY
   color: string; // black, orange, tortoiseshell, gray, chocolate, cinnamon, cream,... 
@@ -14,9 +16,11 @@ class Cat {
   constructor(name: string, sex: string, traits?: string[]);
   constructor(name: string, sex: string, geneMap?: Map<string, string>);
   constructor(father: Cat, mother: Cat);
-  constructor(a: string | Cat, b: string | Cat, c?: string[] | Map<string, string>) 
+  constructor(original: Cat);
+  constructor(a: string | Cat, b?: string | Cat, c?: string[] | Map<string, string>) 
   {
-
+    Cat.counter++; 
+    this.id = Cat.counter; 
     this.name = "Cat";
     this.xy = "unknown";
     this.color = "unknown";
@@ -34,8 +38,18 @@ class Cat {
         ["colorpoint", []]
       ]
     )
-    
-    if (typeof a === "string" && typeof b === "string") {
+    if (typeof a === "object" && a instanceof Cat && !b && !c) {
+      // TODO: implement copy constructor. 
+      this.name = a.name; 
+      for (let key of a.genes.keys()) {
+        this.genes.set(key, a.genes.get(key)!);
+      }
+      this.color = a.color; 
+      this.coatPatterns = a.coatPatterns; 
+      this.breed = a.breed; 
+      this.coatType = a.coatType; 
+      this.xy = a.xy; 
+    } else if (b && typeof a === "string" && typeof b === "string") {
       
       if (a === "") {
         throw new Error("Error: cannot create Cat with empty name.");
@@ -92,7 +106,7 @@ class Cat {
         }
       }
 
-    } else if (typeof a === "object" && typeof b === "object") {
+    } else if (b && typeof a === "object" && typeof b === "object") {
       let father = a; 
       let mother = b; 
       let fGenes = father.getKittenGenes(); 

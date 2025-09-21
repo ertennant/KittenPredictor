@@ -46,6 +46,7 @@ export default function AdvancedPredict() {
       newKittens.push(father.makeKittenWith(mother, `Kitten ${i + 1}`));
     }
     setKittens(newKittens);
+    console.log(newKittens);
   }
 
   function changeVisibleParent(direction: string) {
@@ -84,7 +85,6 @@ export default function AdvancedPredict() {
             className={visibleParent !== "F" ? "hidden lg:block" : ""}
             catName="Father" 
             catID="F"
-            readOnly={false}
             activeMenuID={activeMenuID}
             updateActiveMenu={setActiveMenuID}
             >
@@ -93,7 +93,6 @@ export default function AdvancedPredict() {
             className={visibleParent !== "M" ? "hidden lg:block" : ""}
             catName="Mother"
             catID="M"
-            readOnly={false}
             activeMenuID={activeMenuID}
             updateActiveMenu={setActiveMenuID}
           >
@@ -122,10 +121,9 @@ export default function AdvancedPredict() {
           <GenotypeTable
             // adjust # of kitten tables according to screen width 
             className={visibleKitten === index - 2 ? "hidden 2xl:block" : visibleKitten === index - 1 ? "hidden lg:block" : visibleKitten !== index ? "hidden" : ""}
-            key={k.name}
+            key={"kitten-" + k.id}
             catID={"K" + index}
             cat={k}
-            readOnly={true}
           ></GenotypeTable>
         )
         : ""}

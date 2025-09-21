@@ -11,7 +11,6 @@ import { combineAlleles, convertToPhenoType } from "../genotype";
 
 type AppProps = {
   catID: string, 
-  readOnly?: boolean, 
   catName?: string, 
   cat?: Cat, 
   activeMenuID?: string, 
@@ -19,7 +18,7 @@ type AppProps = {
   className?: string,
 }
 
-export default function GenotypeTable({catID, catName, cat, readOnly, updateActiveMenu, activeMenuID, className}: AppProps) {
+export default function GenotypeTable({catID, catName, cat, updateActiveMenu, activeMenuID, className}: AppProps) {
   const [genotype, setGenotype] : [Map<string, string>, React.Dispatch<SetStateAction<Map<string, string>>>] = useState(
     new Map([
       ["white", ""],
@@ -41,15 +40,7 @@ export default function GenotypeTable({catID, catName, cat, readOnly, updateActi
     }
   }
 
-  function handleOpen(event: any) {
-    console.log(catID);
-    console.log()
-    console.log(catID + "-gen-" + event.currentTarget.title);
-    updateActiveMenu(catID + "-gen-" + event.currentTarget.title);
-  }
-
   function updatePhenotype(pair: string, value: string) {
-    // console.log(`pair = ${pair}, value = ${value}`);
     let updated = new Map(genotype);
     updated.set(pair, value);
     setGenotype(updated);
@@ -71,7 +62,7 @@ export default function GenotypeTable({catID, catName, cat, readOnly, updateActi
       <div className="flex flex-row justify-between items-stretch ">
         <div className={"flex flex-col w-52 mr-2 " + (openPanel === 1 ? "max-[600px]:hidden" : "")}>
           <h2 className="font-bold">Genes</h2>
-          { cat ? 
+          { cat && cat.genes ? 
             Array.from(cat.genes.entries()).map(entry => 
               <GeneInput
                 key={entry[0]}
