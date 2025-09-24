@@ -1,8 +1,9 @@
-import { dilutions, geneMappings, alleleMappings } from "./cat-data-defs";
+import { dilutions, geneMappings, alleleMappings, coatPatterns } from "./cat-data-defs";
 
 export function convertToPhenoType(genes: Map<string, string>) {
   let result : Map<string, string> = new Map([
     ["xy", ""],
+    ["color", ""],
     ["white", ""],
     ["orange", ""],
     ["brown", ""],
@@ -16,34 +17,60 @@ export function convertToPhenoType(genes: Map<string, string>) {
     result.set("xy", genes.get("xy")!);
   }
 
-  // white masks all other colors, orange/tortie masks all except white, brown masks black/gray 
+  // white masks all other colors, orange masks black/brown but tortie combines with black/brown  
   if (genes.get("white") && geneMappings[genes.get("white")!] == "white") {
-    result.set("white", "white");
+    // result.set("white", "white");
+    result.set("color", "white");
   } else if (genes.get("orange") && genes.get("orange")! in geneMappings) {
-    result.set("orange", geneMappings[genes.get("orange")!]); // either orange or tortoiseshell 
-    result.set("agouti", "tabby"); // orange cats are always tabby regardless of agouti gene 
+    let white = geneMappings[genes.get("white") || "Ss"];
+    let orange = geneMappings[genes.get("orange")!]; 
+    let brown = geneMappings[genes.get("brown") || "BB"];
+    let dilute = geneMappings[genes.get("dilute") || "DD"];
+    let value = orange;
+    if (orange === "tortoiseshell") {
+      if (white === "bicolor") {
+        orange = "calico";
+      }
+      if (brown !== "black" || dilute === "dilute") {
+        if (dilute === "dilute") {
+          value = dilutions[brown] + " " + orange; 
+        } else {
+          value = brown + " " + orange; 
+        }
+      } else {
+        value = orange; 
+      }
+      // The orange parts of a tortie are always striped. The agouti gene controls whether the black or brown parts are also striped. 
+      if (genes.get("agouti") && genes.get("agouti")! in geneMappings) {
+        result.set("agouti", geneMappings[genes.get("agouti")!]);
+      }
+    } else {
+      if (dilute === "dilute") {
+        value = dilutions[orange];
+      }
+      // All orange cats have stripes, regardless of whether or not they have the usual tabby genes. 
+      result.set("agouti", "tabby"); 
+    }
+    result.set("color", value);
   } else if (genes.get("brown") && genes.get("brown")! in geneMappings) {
-    result.set("brown", geneMappings[genes.get("brown")!]); // chocolate or cinnamon 
+    let brown = geneMappings[genes.get("brown")!]; 
+    let dilute = geneMappings[genes.get("dilute") || "DD"];
+    if (dilute === "dilute") {
+      result.set("color", dilutions[brown]);
+    } else {
+      result.set("color", brown);
+    }
+
+    // for non-orange cats, check if tabby 
+    if (genes.get("agouti") && genes.get("agouti")! in geneMappings) {
+      result.set("agouti", geneMappings[genes.get("agouti")!]);
+    }
   } 
 
   // white spotting, bicolor, etc. 
   if (genes.get("white") && genes.get("white")! in geneMappings && geneMappings[genes.get("white")!] != "white") {
     result.set("white", geneMappings[genes.get("white")!]);
   } 
-
-  // if cat has dilute gene, update color to dilute version of color 
-  if (genes.get("dilute") && geneMappings[genes.get("dilute")!] == "dilute") {
-    if (result.get("orange")) {
-      result.set("orange", dilutions[result.get("orange")!]);
-    } else if (result.get("brown")) {
-      result.set("brown", dilutions[result.get("brown")!]);
-    }
-  }
-
-  // for non-orange cats, check if tabby 
-  if (result.get("orange") == "" && genes.get("agouti") && genes.get("agouti")! in geneMappings) {
-    result.set("agouti", geneMappings[genes.get("agouti")!]);
-  }
 
   // colorpoint 
   if (genes.get("colorpoint") && result.get("white") != "white" && genes.get("colorpoint")! in geneMappings) {
@@ -55,8 +82,16 @@ export function convertToPhenoType(genes: Map<string, string>) {
       result.set("orange", "");
       result.set("brown", "");
       result.set("agouti", "");
+      result.set("colorpoint", ""); 
+      result.set("color", "albino");
     } 
   }
+
+  if (result.get("white") === undefined || result.get("white") === "white") {
+    result.delete("white"); // only keep result.get("white") if it indicates white spots or patches 
+  }
+  result.delete("orange");
+  result.delete("brown");
 
   // hair length 
   if (genes.get("longhair") && genes.get("longhair")! in geneMappings) {

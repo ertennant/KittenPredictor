@@ -36,7 +36,12 @@ export const colors = [
   "black",
   "black and white",
   "calico",
-  "dilute calico",
+  "blue calico",
+  "gray calico",
+  "chocolate calico",
+  "cinnamon calico",
+  "lilac calico",
+  "fawn calico",
   "chocolate",
   "chocolate and white",
   "cinnamon",
@@ -53,8 +58,13 @@ export const colors = [
   "lilac and white",
   "orange",
   "orange and white",
-  "tortoiseshell",
-  "dilute tortoiseshell",
+  "tortoiseshell", // i.e., black and orange 
+  "gray tortoiseshell", // dilute black and orange = blue and cream 
+  "blue tortoiseshell", // dilute black and orange = blue and cream 
+  "chocolate tortoiseshell", // brown and orange 
+  "cinnamon tortoiseshell", // cinnamon and orange 
+  "lilac tortoiseshell", // light brown and cream 
+  "fawn tortoiseshell", // light cinnamon and cream 
   "tortoiseshell and white",
   "dilute tortoiseshell and white",
   "white",
@@ -175,11 +185,23 @@ export const catTraitCSS : { [key: string]: string} = {
   "fawn and white": "bg-fawn-w",
   "white": "bg-white",
   "calico": "bg-calico",
+  "blue calico": "bg-calico-blue",
+  "gray calico": "bg-calico-blue",
+  "chocolate calico": "bg-calico-chocolate",
+  "cinnamon calico": "bg-calico-cinnamon",
+  "lilac calico": "bg-calico-lilac",
+  "fawn calico": "bg-calico-fawn",
   "dilute calico": "bg-calico-d",
   "tortoiseshell": "bg-tortie",
+  "blue tortoiseshell": "bg-tortie-blue",
+  "gray tortoiseshell": "bg-tortie-blue",
+  "chocolate tortoiseshell": "bg-tortie-chocolate text-white",
+  "cinnamon tortoiseshell": "bg-tortie-cinnamon",
+  "lilac tortoiseshell": "bg-tortie-lilac",
+  "fawn tortoiseshell": "bg-tortie-fawn",
   "dilute tortoiseshell": "bg-tortie-d",
-  "tortoiseshell-and-white": "bg-tortie-d",
-  "dilute-tortoiseshell-and-white": "bg-tortie-dw",
+  "tortoiseshell-and-white": "bg-calico",
+  "dilute-tortoiseshell-and-white": "bg-calico-blue",
 }
 
 // Mapping of gene name -> list of valid allele pairs 

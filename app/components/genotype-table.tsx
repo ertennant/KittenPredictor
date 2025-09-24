@@ -47,7 +47,9 @@ export default function GenotypeTable({catID, catName, cat, updateActiveMenu, ac
   }
 
   return (
-    <div className={className + " " + "rounded-2xl p-2 border border-white bg-white/70 backdrop-blur-md"}>
+    <div className={className + " " + "rounded-2xl p-2 border border-white bg-white/70 backdrop-blur-md"}
+      style={(catName === "Father" || catName === "Mother") ? {zIndex: 5} : {}}
+    >
       <h1 className="font-extrabold text-lg w-full">
         {catName ?? cat?.name ?? "Cat"}
         <Image

@@ -11,7 +11,6 @@ class Cat {
   coatPatterns: string[]; // tabby, tuxedo, etc.
   breed?: string; 
   genes: Map<string, string[] | never>;
-  // genes: {[key: string]: string[] | never}; 
   
   constructor(name: string, sex: string, traits?: string[]);
   constructor(name: string, sex: string, geneMap?: Map<string, string>);
@@ -61,25 +60,23 @@ class Cat {
 
         if (c instanceof Map) {
           for (let entry of splitAlleles(c).entries()) {
-            // this.genes[entry[0]] = entry[1]; 
             this.genes.set(entry[0], entry[1]); 
           }
           let p = convertToPhenoType(c);
-          for (let value of p.values()) {
-            if (colors.includes(value)) {
-              this.color = value; 
-            } else if (coatTypes.includes(value)) {
-              this.coatType = value; 
-            } else if (coatPatterns.includes(value)) {
-              this.coatPatterns.push(value);
-            } else if (value == "XX" || value == "XY") {
-              this.xy = value;
-            } 
+          if (p.get("xy") == "XX" || p.get("xy") == "XY") {
+            this.xy = p.get("xy")!;
+          } 
+          this.color = p.get("color") || "unknown";
+          this.coatType = p.get("longhair") || "unknown"; 
+          if (p.get("agouti")) {
+            this.coatPatterns.push(p.get("agouti")!);
+          }
+          if (p.get("colorpoint")) {
+            this.coatPatterns.push(p.get("colorpoint")!);
           }
         } else {
           this.xy = b.toUpperCase(); 
           for (let trait of c) {
-            // trait = trait.toLowerCase(); // no longer needed 
             if (colors.includes(trait)) {
               this.color = trait;
               if (this.color === "calico" || trait.endsWith(" and white")) {
@@ -120,18 +117,19 @@ class Cat {
 
       sortAlleles(this.genes);
 
-      for (let value of convertToPhenoType(combineAlleles(this.genes)).values()) {
-        if (colors.includes(value)) {
-          this.color = value; 
-        } else if (coatTypes.includes(value)) {
-          this.coatType = value; 
-        } else if (coatPatterns.includes(value)) {
-          this.coatPatterns.push(value);
-        } else if (value == "XX" || value == "XY") {
-          this.xy = value;
-        } 
+      let p = convertToPhenoType(combineAlleles(this.genes));
+      if (p.get("xy") == "XX" || p.get("xy") == "XY") {
+        this.xy = p.get("xy")!;
+      } 
+      this.color = p.get("color") || "unknown";
+      this.coatType = p.get("longhair") || "unknown"; 
+      if (p.get("agouti")) {
+        this.coatPatterns.push(p.get("agouti")!);
       }
-
+      if (p.get("colorpoint")) {
+        this.coatPatterns.push(p.get("colorpoint")!);
+      }
+      
       // TODO: rex and hairless (below is old code to replace)
       // if (fGenes.devonsphynx && mGenes.devonsphynx) {
       //   this.genes.devonsphynx = fGenes.devonsphynx.concat(mGenes.devonsphynx).sort().reverse();
