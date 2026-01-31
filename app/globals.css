@@ -7,13 +7,14 @@
 }
 
 :root {
-  --primary: 255 255 255; 
+  --primary: 231 229 228; 
+  --first: 231 229 228; 
   --text-normal: 0 0 0; 
   --text-disabled: 100 116 139;
-  /* --accent: 16 185 129; */
+  /* --accent: 14 165 233; */
   --accent: 14 165 233;
-  /* --accent-light: 52 211 153; */
-  --accent-light: 185 185 185;
+  /* --accent-light: 185 185 185; */
+  --accent-light: 168 162 158;
   --accent-lightest: 230 230 230; 
   --accent-cyan: 34 211 238;
   --orange: 250 145 60;
@@ -26,13 +27,6 @@
   --white: 255 255 255;
   --black: 0 0 0;
 }
-
-/* @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-} */
 
 html {
   margin: 0; 
@@ -47,28 +41,11 @@ body {
   min-height: 100vh;
   /* height: 100%; */
   font-family: Arial, Helvetica, sans-serif;
-  background:
-    /* gradient mix of several cat colours */
-    radial-gradient(circle at 10% 10%, 
-      rgb(var(--orange)), rgba(0,255,255,0) 60%),
-    radial-gradient(circle at 50% 10%, 
-      rgb(var(--cream)), rgba(0,255,0,0) 60%),
-    radial-gradient(circle at 90% 10%, 
-      rgb(var(--fawn)), rgba(0,255,255,0) 60%),
-    radial-gradient(circle at 90% 50%, 
-      rgb(var(--gray)), rgba(0,255,128,0) 60%),
-    radial-gradient(circle at 90% 90%, 
-      rgb(var(--lilac)), rgba(255,0,0,0) 60%),
-    radial-gradient(circle at 50% 90%, 
-      rgb(var(--white)), rgba(255,0,255,0) 60%),
-    radial-gradient(circle at 10% 90%, 
-      rgb(var(--cinnamon)), rgba(128,0,255,0) 60%),
-    radial-gradient(circle at 10% 50%, 
-      rgb(var(--chocolate)), rgba(128,0,255,0) 60%)
-    ;
-  background-attachment: fixed;
+  background-color: rgb(248, 248, 248);
+  background-image: url("../public/the-lucky-neko-JYhw8TtoxTg-unsplash.jpg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: bottom;
+
 }
 
-/* .glow {
-  box-shadow: 0 0 20px px #FFFFFF;
-} */

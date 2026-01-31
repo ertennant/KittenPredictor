@@ -24,6 +24,7 @@ export default {
         cinnamon: "rgb(var(--cinnamon))",
         lilac: "rgb(var(--lilac))",
         fawn: "rgb(var(--fawn))",
+        primary: "rgb(var(--primary))",
       },
     },
     backgroundImage: {

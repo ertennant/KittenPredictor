@@ -33,7 +33,7 @@ export default function RootLayout({
         <footer className='absolute bottom-0 flex flex-row justify-between items-center w-full text-center'>
           <div className="w-[24px]"></div>
           <small>
-            Copyright &copy; 2025 Elizabeth Tennant 
+            Copyright &copy; 2026 Elizabeth Tennant 
           </small>
           <a href="https://github.com/ertennant" className="p-2">
             <Image

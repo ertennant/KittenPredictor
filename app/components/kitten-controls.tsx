@@ -17,7 +17,7 @@ export default function KittenControls() {
         </input>
       </div>
       <input
-        className="rounded-xl px-2 py-1 cursor-pointer bg-accent hover:scale-110 hover:bg-accent-cyan active:shadow-inner transition duration-700 ease-in-out"
+        className="rounded-xl px-2 py-1 font-bold cursor-pointer bg-tortie-lilac hover:scale-110 hover:bg-tortie-fawn active:shadow-inner transition duration-700 ease-in-out"
         type="submit"
         value="Generate Kittens"
       >

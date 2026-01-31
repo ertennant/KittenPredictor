@@ -12,7 +12,7 @@ export default function KittenProfile({cat, className}: KittenProfileProps) {
   console.log(cat);
   return (
     <div className={className + " " + "flex flex-col items-center m-2"}>      
-      <div className="rounded-2xl p-6 border border-white bg-white/60 backdrop-blur-md flex flex-col items-stretch">
+      <div className="rounded-2xl p-6 border border-white bg-primary/60 backdrop-blur-md flex flex-col items-stretch">
         <div className="relative rounded-2xl bg-white/70 p-2 my-2 border-2 border-slate-300 text-xl">
           <input
             type="text"

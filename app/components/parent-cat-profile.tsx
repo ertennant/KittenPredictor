@@ -59,7 +59,7 @@ export default function ParentCatProfile({parentID, activeMenuID, updateActiveMe
 
   return (
     // WARNING: the dropdown menu does not display correctly using Tailwind for z index, but does display correctly using element style. 
-    <div className={className + " " + "rounded-2xl p-6 border border-white bg-white/70 backdrop-blur-md flex flex-col items-stretch m-2"} style={{zIndex: 99}}>
+    <div className={className + " " + "rounded-2xl p-6 border border-white bg-primary/60 backdrop-blur-md flex flex-col items-stretch m-2"} style={{zIndex: 99}}>
       <div className={"relative rounded-2xl bg-white/20 focus-within:bg-white hover:bg-white transition-colors border-2 border-accent-light p-2 my-2 text-xl"}>
         <input
           type="text"
