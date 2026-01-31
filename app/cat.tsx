@@ -148,6 +148,8 @@ class Cat {
       if (father.breed && mother.breed && !father.breed.includes("Domestic") && !mother.breed.includes("Domestic")) {
         if (father.breed === mother.breed) {
           this.breed = father.breed; 
+        } else if ((father.breed === "Siamese" && mother.breed === "Burmese") || (father.breed === "Burmese" && mother.breed === "Siamese")) {
+          this.breed = "Tonkinese";
         } else {
           this.breed = father.breed + " x " + mother.breed; 
         }
