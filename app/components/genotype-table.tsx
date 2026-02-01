@@ -61,8 +61,8 @@ export default function GenotypeTable({catID, catName, cat, updateActiveMenu, ac
         >
         </Image>
       </h1>
-      <div className="flex flex-row justify-between items-stretch ">
-        <div className={"flex flex-col w-52 mr-2 " + (openPanel === 1 ? "max-[600px]:hidden" : "")}>
+      <div className="flex flex-row justify-between items-stretch">
+        <div className={"w-52 mr-2 " + (openPanel === 1 ? "max-[500px]:hidden" : "")}>
           <h2 className="font-bold">Genes</h2>
           { cat && cat.genes ? 
             Array.from(cat.genes.entries()).map(entry => 
@@ -96,7 +96,7 @@ export default function GenotypeTable({catID, catName, cat, updateActiveMenu, ac
           }
         </div>
         <ButtonNext
-          className={openPanel === 0 ? "px-1 py-32 min-[600px]:hidden" : "hidden"}
+          className={openPanel === 0 ? "px-1 py-32 min-[500px]:hidden" : "hidden"}
           altText="Show Phenotype Panel"
           disabled={false}
           onClick={() => changeVisiblePanel("next")}
@@ -104,14 +104,14 @@ export default function GenotypeTable({catID, catName, cat, updateActiveMenu, ac
         >
         </ButtonNext>
         <ButtonPrev
-          className={openPanel === 1 ? "pl-2 py-32 min-[600px]:hidden" : "hidden"}
+          className={openPanel === 1 ? "pl-2 py-32 min-[500px]:hidden" : "hidden"}
           altText="Show Gene Panel"
           disabled={false}
           onClick={() => changeVisiblePanel("prev")}
           size={20}          
         >
         </ButtonPrev>
-        <div className={"flex flex-col w-52 ml-4 " + (openPanel === 0 ? "max-[600px]:hidden" : "")}>
+        <div className={"flex flex-col w-52 ml-4 " + (openPanel === 0 ? "max-[500px]:hidden" : "")}>
           <h2 className="font-bold">Phenotype</h2>
           {
             Array.from(convertToPhenoType(cat ? combineAlleles(cat.genes) : genotype).entries()).filter(entry => entry[0] != "xy").map(entry => 

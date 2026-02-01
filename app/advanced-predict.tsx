@@ -11,11 +11,9 @@ export default function AdvancedPredict() {
   const [kittens, setKittens] = useState<Cat[]>([]); // array of kittens 
   const [activeMenuID, setActiveMenuID] = useState(undefined); // ID of ComboBox menu currently open (to prevent more than one from being open at the same time)
   const [visibleParent, setVisibleParent] = useState("F"); // ID of parent cat currently visible (for small screens only)
-  const [visibleKitten, setVisibleKitten] = useState(0); // ID of first kitten currently visible (for small screens only)
 
   // Use provided parent cat data to generate kittens. 
   function handleSubmit(event: any) {
-    setVisibleKitten(0); // reset 
     event.preventDefault(); 
 
     let fGenes : Map<string, string> = new Map();
@@ -57,24 +55,16 @@ export default function AdvancedPredict() {
     }
   }
 
-  function changeVisibleKitten(direction: string) {
-    if (direction === "prev" && visibleKitten > 0) {
-      setVisibleKitten(visibleKitten - 1);
-    } else if (direction === "next" && visibleKitten < kittens.length - 1) {
-      setVisibleKitten(visibleKitten + 1);
-    }
-  }
-
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
+    <div className="flex flex-col">
+      <form onSubmit={handleSubmit} className="flex flex-col">
         <div>
           <KittenControls>
           </KittenControls>
         </div>
-        <div className="flex flex-row justify-center gap-6 pt-6 px-6 ">
+        <div className="flex flex-row self-center gap-6 pt-6">
           <ButtonPrev
-            className="lg:hidden pl-2"
+            className={"min-[980px]:hidden pl-2 " + (visibleParent === "F" ? "invisible" : "")}
             disabled={visibleParent === "F"}
             onClick={() => changeVisibleParent("prev")}
             altText="View Previous Cat"
@@ -82,7 +72,7 @@ export default function AdvancedPredict() {
           >
           </ButtonPrev>
           <GenotypeTable
-            className={visibleParent !== "F" ? "hidden lg:block" : ""}
+            className={visibleParent !== "F" ? "hidden min-[980px]:block" : ""}
             catName="Father" 
             catID="F"
             activeMenuID={activeMenuID}
@@ -90,7 +80,7 @@ export default function AdvancedPredict() {
             >
           </GenotypeTable>
           <GenotypeTable
-            className={visibleParent !== "M" ? "hidden lg:block" : ""}
+            className={visibleParent !== "M" ? "hidden min-[980px]:block" : ""}
             catName="Mother"
             catID="M"
             activeMenuID={activeMenuID}
@@ -98,7 +88,7 @@ export default function AdvancedPredict() {
           >
           </GenotypeTable>
           <ButtonNext
-            className="lg:hidden px-1"
+            className={"min-[980px]:hidden px-1 " + (visibleParent === "M" ? "invisible" : "")}
             disabled={visibleParent === "M"}
             onClick={() => changeVisibleParent("next")}
             altText="View Next Cat"
@@ -107,34 +97,18 @@ export default function AdvancedPredict() {
           </ButtonNext>
         </div>
       </form>
-      <div className="flex flex-row justify-center gap-6 pt-6 flex-wrap">
-        <ButtonPrev
-          className={kittens.length < 2 ? "hidden" : kittens.length < 4 ? "2xl:hidden pl-2" : "pl-2"}
-          disabled={visibleKitten === 0}
-          onClick={() => changeVisibleKitten("prev")}
-          altText="View Previous Kitten"
-          size={20}
-        >
-        </ButtonPrev>
+      <div className="flex flex-row self-center overflow-scroll snap-x snap-mandatory justify-around gap-6 pt-6 mx-12 max-[499px]:w-[250px] min-[500px]:w-[458px] min-[980px]:w-[940px] min-[1450px]:w-[1422px]">
         {kittens.length > 0 ? 
           kittens.map((k, index) => 
           <GenotypeTable
             // adjust # of kitten tables according to screen width 
-            className={visibleKitten === index - 2 ? "hidden 2xl:block" : visibleKitten === index - 1 ? "hidden lg:block" : visibleKitten !== index ? "hidden" : ""}
+            className={"snap-start"}
             key={"kitten-" + k.id}
             catID={"K" + index}
             cat={k}
           ></GenotypeTable>
         )
         : ""}
-        <ButtonNext
-          className={kittens.length < 2 ? "hidden" : kittens.length < 4 ? "2xl:hidden px-1" : "px-1"}
-          disabled={visibleKitten === kittens.length - 1}
-          onClick={() => changeVisibleKitten("next")}
-          altText="View Next Kitten"
-          size={20}
-        >
-        </ButtonNext>
       </div>
     </div>
   )

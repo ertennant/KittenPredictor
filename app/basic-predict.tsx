@@ -22,14 +22,6 @@ export default function BasicPredict() {
     }
   }
 
-  function changeVisibleKitten(direction: string) {
-    if (direction === "prev" && visibleKitten > 0) {
-      setVisibleKitten(visibleKitten - 1);
-    } else if (direction === "next" && visibleKitten < kittens.length - 1) {
-      setVisibleKitten(visibleKitten + 1);
-    }
-  }
-
   function handleSubmit(event: any) {
     setVisibleKitten(0);
     event.preventDefault(); 
@@ -65,13 +57,13 @@ export default function BasicPredict() {
   }
 
   return (
-    <div>
+    <div className='flex flex-col'>
       <form onSubmit={handleSubmit}>
         <KittenControls>
         </KittenControls>
         <div className="flex flex-row justify-center" >          
           <ButtonPrev
-            className="md:hidden pl-2"
+            className={"min-[660px]:hidden pl-2 " + (visibleParent === "F" ? "invisible" : "")}
             disabled={visibleParent === "F"}
             onClick={() => changeVisibleParent("prev")}
             altText="View Previous Cat"
@@ -79,21 +71,21 @@ export default function BasicPredict() {
           >            
           </ButtonPrev>
           <ParentCatProfile
-            className={visibleParent !== "F" ? "hidden md:block" : ""}
+            className={visibleParent !== "F" ? "hidden min-[660px]:block" : ""}
             parentID="F"
             activeMenuID={activeMenuID}
             updateActiveMenu={setActiveMenuID}
           >
           </ParentCatProfile>
           <ParentCatProfile
-            className={visibleParent !== "M" ? "hidden md:block" : ""}
+            className={visibleParent !== "M" ? "hidden min-[660px]:block" : ""}
             parentID="M"
             activeMenuID={activeMenuID}
             updateActiveMenu={setActiveMenuID}
           >
           </ParentCatProfile>
           <ButtonNext
-            className="md:hidden px-1"
+            className={"min-[660px]:hidden px-1 " + (visibleParent === "M" ? "invisible" : "")}
             disabled={visibleParent === "M"}
             onClick={() => changeVisibleParent("next")}
             altText="View Next Cat"
@@ -102,31 +94,15 @@ export default function BasicPredict() {
           </ButtonNext>
         </div>
       </form>
-      <div className="flex flex-row justify-center flex-wrap">
-        <ButtonPrev
-          className={kittens.length < 2 ? "hidden" : kittens.length < 3 ? "md:hidden pl-2" : kittens.length < 4 ? "lg:hidden pl-2" : kittens.length < 5 ? "xl:hidden pl-2" : kittens.length < 6 ? "2xl:hidden pl-2" : "pl-2"}
-          onClick={() => changeVisibleKitten("prev")}
-          disabled={visibleKitten === 0}
-          altText="View Previous Kitten"
-          size={20}
-        >
-        </ButtonPrev>
+      <div className="flex flex-row self-center overflow-scroll snap-x justify-around snap-mandatory mx-12 max-[659px]:w-[300px] min-[660px]:w-[600px] min-[960px]:w-[930px] min-[1256px]:w-[1226px] min-[1560px]:w-[1530px] min-[1870px]:w-[1840px] ">
         {kittens.length > 0 ? kittens.map((kitten, index) => 
           <KittenProfile
-            className={visibleKitten === index - 4 ? "hidden 2xl:block pl-2" : visibleKitten === index - 3 ? "hidden xl:block" : visibleKitten === index - 2 ? "hidden lg:block" : visibleKitten === index - 1 ? "hidden md:block" : visibleKitten !== index ? "hidden" : ""}
+            className="snap-start"
             key={kitten.name}
             cat={kitten}
           ></KittenProfile>
         )
         : ""}
-        <ButtonNext
-          className={kittens.length < 2 ? "hidden" : kittens.length < 3 ? "md:hidden px-1" : kittens.length < 4 ? "lg:hidden px-1" : kittens.length < 5 ? "xl:hidden px-1" : kittens.length < 6 ? "2xl:hidden px-1" : "px-1"}
-          onClick={() => changeVisibleKitten("next")}
-          disabled={visibleKitten === kittens.length - 1}
-          altText="View Next Kitten"
-          size={20}
-        >
-        </ButtonNext>
       </div>
     </div>
   )

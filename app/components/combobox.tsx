@@ -109,7 +109,7 @@ export default function ComboBox({options, isOpen=false, onOpen, selectOption, p
         }
       </div>
       {!readOnly && isOpen ? 
-        <ul role="listbox" className={"absolute rounded-lg border-2 border-accent-light bg-white max-h-60 overflow-scroll" + (size == "lg" ? " w-60 my-11" : " w-20 my-8")} >
+        <ul role="listbox" className={"absolute rounded-lg border-2 border-accent-light bg-white max-h-60 overflow-scroll" + (size == "lg" ? " w-60 my-11" : " w-20 my-8")} style={{zIndex: 900}}>
           {options.filter(trait => trait.toLowerCase().startsWith(currentValue.toLowerCase())).map(trait => 
             <li key={trait} id={!traitType ? "li-" + trait : "li-" + trait + '-' + traitType} onClick={handleSelect} className={"cursor-pointer p-2 my-1 hover:bg-accent-light/20 transition-colors"}>{trait}</li>
           )}
