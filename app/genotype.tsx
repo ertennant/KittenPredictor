@@ -1,4 +1,4 @@
-import { dilutions, geneMappings, alleleMappings, coatPatterns } from "./cat-data-defs";
+import { dilutions, geneMappings, alleleMappings, coatPatterns, superscriptMappings } from "./cat-data-defs";
 
 export function convertToPhenoType(genes: Map<string, string>) {
   let result : Map<string, string> = new Map([
@@ -15,6 +15,16 @@ export function convertToPhenoType(genes: Map<string, string>) {
 
   if (genes.get("xy")) {
     result.set("xy", genes.get("xy")!);
+  }
+
+  for (const entry of genes.entries()) {
+    if (entry[1].includes("/")) {
+      entry[1] = entry[1].replace("/", "");
+      for (const sup in superscriptMappings) {
+        entry[1] = entry[1].replaceAll(sup, superscriptMappings[sup])
+      }
+    }
+    genes.set(entry[0], entry[1]);
   }
 
   // white masks all other colors, orange masks black/brown but tortie combines with black/brown  
@@ -97,6 +107,7 @@ export function convertToPhenoType(genes: Map<string, string>) {
   if (genes.get("longhair") && genes.get("longhair")! in geneMappings) {
     result.set("longhair", geneMappings[genes.get("longhair")!]);
   }
+
   return result; 
 
 }

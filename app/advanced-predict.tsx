@@ -6,6 +6,7 @@ import KittenControls from './components/kitten-controls';
 import { useState } from 'react';
 import ButtonPrev from './components/button-prev';
 import ButtonNext from './components/button-next';
+import { superscriptMappings } from './cat-data-defs';
 
 export default function AdvancedPredict() {
   const [kittens, setKittens] = useState<Cat[]>([]); // array of kittens 
@@ -22,10 +23,17 @@ export default function AdvancedPredict() {
     mGenes.set("xy", "XX");
 
     for (let element of event.currentTarget.elements) {
+      let val = element.value; 
+      if (val.includes("/")) {
+        val = val.replace("/", "");
+      }
+      for (const sup in superscriptMappings) {
+        val = val.replaceAll(sup, superscriptMappings[sup])
+      }
       if (element.id.includes("F-gen")) {
-        fGenes.set(element.name.split('-')[2], element.value); 
+        fGenes.set(element.name.split('-')[2], val); 
       } else if (element.id.includes("M-gen")) {
-        mGenes.set(element.name.split('-')[2], element.value); 
+        mGenes.set(element.name.split('-')[2], val); 
       }
     }
 
@@ -44,7 +52,6 @@ export default function AdvancedPredict() {
       newKittens.push(father.makeKittenWith(mother, `Kitten ${i + 1}`));
     }
     setKittens(newKittens);
-    console.log(newKittens);
   }
 
   function changeVisibleParent(direction: string) {

@@ -4,7 +4,7 @@ import { SetStateAction, useState } from "react";
 import ButtonNext from "./button-next";
 import ButtonPrev from "./button-prev";
 import Cat from "../cat";
-import { genes } from "../cat-data-defs"; 
+import { genes, genesFormatted, genesRawToFormatted } from "../cat-data-defs"; 
 import CatDataItem from "./cat-data-item";
 import GeneInput from "./gene-input";
 import { combineAlleles, convertToPhenoType } from "../genotype";
@@ -74,18 +74,18 @@ export default function GenotypeTable({catID, catName, cat, updateActiveMenu, ac
                 options={[]}
                 onUpdate={undefined}
                 readOnly={true}
-                initValue={entry[1].join("")}
+                initValue={genesRawToFormatted[entry[1].join("")]}
               >
               </GeneInput>
             )
             : 
-            Object.entries(genes).map(entry => 
+            Object.entries(genesFormatted).map(entry => 
               <GeneInput
                 key={entry[0]}
                 title={entry[0]}
                 catID={catID}
                 name={entry[0].toLowerCase()}
-                options={entry[0] !== "Orange" ? entry[1] : catID === "F" ? entry[1].filter(e => e.length == 1) : entry[1].filter(e => e.length == 2)}
+                options={entry[0] !== "Orange" ? entry[1] : catID === "F" ? entry[1].filter(e => e.length == 1) : entry[1].filter(e => e.length > 1)}
                 onUpdate={updatePhenotype}
                 readOnly={false}
                 isOpen={activeMenuID === catID + "-gen-" + entry[0]}

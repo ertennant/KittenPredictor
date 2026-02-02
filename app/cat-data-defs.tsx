@@ -216,6 +216,61 @@ export const genes : { [key: string]: string[] } = {
   "Longhair": ["LL", "Ll", "ll"]
 }
 
+export const superscriptMappings : {[key: string]: string} = {
+  "ᵇ": "b",
+  "ˡ": "l", 
+  "ˢ": "s"
+}
+
+// Gene representation for UI. 
+export const genesFormatted : { [key: string]: string[] } = {
+  "White": ["W/W", "W/S", "W/w", "S/S", "S/s", "w/w"], 
+  "Orange": ["O/O", "O", "O/o", "oo", "o"],
+  "Brown": ["B/B", "B/b", "B/bˡ", "b/b", "b/bˡ", "bˡ/bˡ"], 
+  "Dilute": ["D/D", "D/d", "d/d"], 
+  "Agouti": ["A/A", "A/a", "a/a"], 
+  "Colorpoint": ["C/C", "C/cˢ", "C/cᵇ", "cˢ/cˢ", "cᵇ/cᵇ", "cˢ/cᵇ", "c/c"],
+  "Longhair": ["L/L", "L/l", "l/l"]
+}
+
+export const genesRawToFormatted : { [key: string]: string } = {
+  "WW": "W/W", 
+  "WS": "W/S", 
+  "Ww": "W/w", 
+  "SS": "S/S", 
+  "Ss": "S/s", 
+  "ww": "w/w", 
+  "OO": "O/O",
+  "O": "O",
+  "Oo": "O/o",
+  "oo": "o/o",
+  "o": "o",
+  "BB": "B/B", 
+  "Bb": "B/b",
+  "Bbl": "B/bˡ", 
+  "bb": "b/b", 
+  "bbl": "b/bˡ", 
+  "blbl": "bˡ/bˡ", 
+  "DD": "D/D", 
+  "Dd": "D/d", 
+  "dd": "d/d", 
+  "AA": "A/A", 
+  "Aa": "A/a",
+  "aa": "a/a", 
+  "CC": "C/C", 
+  "Ccs": "C/cˢ", 
+  "Ccb": "C/cᵇ", 
+  "cscs": "cˢ/cˢ", 
+  "cbcb": "cᵇ/cᵇ", 
+  "cscb": "cˢ/cᵇ", 
+  "cc": "c/c",
+  "LL": "L/L",
+  "Ll": "L/l", 
+  "ll": "l/l",
+  "XX": "X/X",
+  "XY": "X/Y"
+}
+
 // Mapping of allele string -> array of alleles 
 export const alleleMappings : { [key: string]: string[] } = {
   "XX": ["X", "X"],
@@ -258,13 +313,13 @@ export const alleleMappings : { [key: string]: string[] } = {
 // Explanations to show the user what each gene does. The current ordering is intended to be the most intuitive for teaching the user how they interact. 
 // TODO: add rex and hairless
 export const tooltips : { [key: string]: string} = {
-  "White": "WW, WS, Ww cause dominant white, making the cat white regardless of other genes. SS causes large white markings such as the van pattern, Ss causes smaller white markings such as tuxedo and often turns tortoiseshell into calico.",
-  "Orange": "O and OO make the coat orange (formally called red) or cream except when dominant white is present. Oo causes tortoiseshell and calico fur. Since it is on the X chromosome, males can only have O or o, so all tortoiseshell and calico cats are either female or XXY.",
-  "Brown": "bb and bbl cause chocolate coats, blbl causes cinnamon. BB, Bb, Bbl cause black or gray coats unless Orange or White is present.",
-  "Dilute": "DD and Dd cause normal intensity of existing color. dd lightens existing color. Turns black to gray (blue), orange (red) to cream, chocolate to lilac, cinnamon to fawn.",
-  "Agouti": "AA and Aa cause tabby pattern, aa causes solid color coat except in orange and cream cats, which always have tabby markings.",
-  "Colorpoint": "CC, Cs, and Cb appear normal. ss causes the typical pointed pattern of Siamese. bb causes the sepia pattern of Burmese. sb causes mink colorpoint, and occurs in Siamese-Burmese mixes and Tonkinese. cc is rare, and causes albinism.",
-  "Longhair": "LL and Ll cause short hair, ll causes long hair.",
+  "White": "W/W, W/S, W/w cause dominant white, making the cat white regardless of other genes. S/S causes large white markings such as the van pattern, S/s causes smaller white markings such as tuxedo and often turns tortoiseshell into calico.",
+  "Orange": "O and O/O make the coat orange (formally called red) or cream except when dominant white is present. O/o causes tortoiseshell and calico fur. Since it is on the X chromosome, males can only have O or o, so all tortoiseshell and calico cats are either female or XXY.",
+  "Brown": "b/b and b/bˡ cause chocolate coats, bˡ/bˡ causes cinnamon. B/B, B/b, B/bˡ cause black or gray coats unless Orange or White is present.",
+  "Dilute": "D/D and D/d cause normal intensity of existing color. d/d lightens existing color. Turns black to gray (blue), orange (red) to cream, chocolate to lilac, cinnamon to fawn.",
+  "Agouti": "A/A and A/a cause tabby pattern, a/a causes solid color coat except in orange and cream cats, which always have tabby markings.",
+  "Colorpoint": "C/C, C/cˢ, and C/cᵇ appear normal. cˢ/cˢ causes the typical pointed pattern of Siamese. cᵇ/cᵇ causes the sepia pattern of Burmese. cˢ/cᵇ causes mink colorpoint, and occurs in Siamese x Burmese crosses and Tonkinese. c/c is rare, and causes albinism.",
+  "Longhair": "L/L and L/l cause short hair, l/l causes long hair.",
 }
 
 // Maps regular colors to their dilute versions. 
