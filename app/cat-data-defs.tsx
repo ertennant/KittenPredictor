@@ -212,7 +212,7 @@ export const genes : { [key: string]: string[] } = {
   "Brown": ["BB", "Bb", "Bbl", "bb", "bbl", "blbl"], 
   "Dilute": ["DD", "Dd", "dd"], 
   "Agouti": ["AA", "Aa", "aa"], 
-  "Colorpoint": ["CC", "Ccs", "Ccb", "cscs", "cbcb", "cscb", "cc"],
+  "Colorpoint": ["CC", "Ccs", "Ccb", "Cc", "cscs", "csc", "cbcb", "cbc", "cscb", "cc"],
   "Longhair": ["LL", "Ll", "ll"]
 }
 
@@ -229,7 +229,7 @@ export const genesFormatted : { [key: string]: string[] } = {
   "Brown": ["B/B", "B/b", "B/bˡ", "b/b", "b/bˡ", "bˡ/bˡ"], 
   "Dilute": ["D/D", "D/d", "d/d"], 
   "Agouti": ["A/A", "A/a", "a/a"], 
-  "Colorpoint": ["C/C", "C/cˢ", "C/cᵇ", "cˢ/cˢ", "cᵇ/cᵇ", "cˢ/cᵇ", "c/c"],
+  "Colorpoint": ["C/C", "C/cˢ", "C/cᵇ", "C/c", "cˢ/cˢ", "cˢ/c", "cᵇ/cᵇ", "cᵇ/c", "cˢ/cᵇ", "c/c"],
   "Longhair": ["L/L", "L/l", "l/l"]
 }
 
@@ -258,10 +258,13 @@ export const genesRawToFormatted : { [key: string]: string } = {
   "Aa": "A/a",
   "aa": "a/a", 
   "CC": "C/C", 
+  "Cc": "C/c", 
   "Ccs": "C/cˢ", 
   "Ccb": "C/cᵇ", 
   "cscs": "cˢ/cˢ", 
+  "csc": "cˢ/c", 
   "cbcb": "cᵇ/cᵇ", 
+  "cbc": "cᵇ/c", 
   "cscb": "cˢ/cᵇ", 
   "cc": "c/c",
   "LL": "L/L",
@@ -299,11 +302,14 @@ export const alleleMappings : { [key: string]: string[] } = {
   "Aa": ["A", "a"],
   "aa": ["a", "a"],
   "CC": ["C", "C"], 
+  "Cc": ["C", "c"], 
   "Ccs": ["C", "cs"], 
   "Ccb": ["C", "cb"], 
   "cscs": ["cs", "cs"], 
+  "csc": ["cs", "c"], 
   "cscb": ["cs", "cb"], 
   "cbcb": ["cb", "cb"], 
+  "cbc": ["cb", "c"], 
   "cc": ["c", "c"], 
   "LL": ["L", "L"], 
   "Ll": ["L", "l"], 
@@ -317,8 +323,8 @@ export const tooltips : { [key: string]: string} = {
   "Orange": "O and O/O make the coat orange (formally called red) or cream except when dominant white is present. O/o causes tortoiseshell and calico fur. Since it is on the X chromosome, males can only have O or o, so all tortoiseshell and calico cats are either female or XXY.",
   "Brown": "b/b and b/bˡ cause chocolate coats, bˡ/bˡ causes cinnamon. B/B, B/b, B/bˡ cause black or gray coats unless Orange or White is present.",
   "Dilute": "D/D and D/d cause normal intensity of existing color. d/d lightens existing color. Turns black to gray (blue), orange (red) to cream, chocolate to lilac, cinnamon to fawn.",
-  "Agouti": "A/A and A/a cause tabby pattern, a/a causes solid color coat except in orange and cream cats, which always have tabby markings.",
-  "Colorpoint": "C/C, C/cˢ, and C/cᵇ appear normal. cˢ/cˢ causes the typical pointed pattern of Siamese. cᵇ/cᵇ causes the sepia pattern of Burmese. cˢ/cᵇ causes mink colorpoint, and occurs in Siamese x Burmese crosses and Tonkinese. c/c is rare, and causes albinism.",
+  "Agouti": "A/A and A/a cause visible tabby markings unless the cat is solid white. a/a cats do not have tabby markings on non-orange fur. All orange fur has tabby markings.",
+  "Colorpoint": "Cats with one or two copies of C do not show any form of colorpoint pattern. Cats with cˢ/cˢ or cˢ/c have the Siamese colorpoint pattern. cᵇ/cᵇ or cᵇ/c cause the sepia pattern of Burmese. cˢ/cᵇ causes mink colorpoint, and occurs in Siamese x Burmese crosses and Tonkinese. c/c causes complete albinism.",
   "Longhair": "L/L and L/l cause short hair, l/l causes long hair.",
 }
 
@@ -353,8 +359,10 @@ export const geneMappings : { [key: string]: string } = {
   "AA": "tabby", 
   "Aa": "tabby", 
   "cscs": "colorpoint", 
+  "csc": "colorpoint", 
   "cscb": "mink", 
   "cbcb": "sepia", 
+  "cbc": "sepia", 
   "cc": "albino", 
   "LL": "shorthair",
   "Ll": "shorthair",
@@ -383,9 +391,9 @@ export const traitMappings : { [key: string]: string[][]} = {
   "shorthair": [["L", "L"], ["L", "l"]], 
   "dilute": [["d", "d"]],
   "non-dilute": [["D", "D"], ["D", "d"]],
-  "colorpoint": [["cs", "cs"]],
+  "colorpoint": [["cs", "cs"], ["cs", "c"]],
   "mink": [["cs", "cb"]],
-  "sepia": [["cb", "cb"]],
+  "sepia": [["cb", "cb"], ["cb", "c"]],
   "albino": [["c", "c"]],
   "non-colorpoint": [["C", "C"], ["C", "cs"], ["C", "cb"], ["C", "c"]]
 }
