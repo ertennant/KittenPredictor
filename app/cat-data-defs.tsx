@@ -207,7 +207,7 @@ export const catTraitCSS : { [key: string]: string} = {
 // Mapping of gene name -> list of valid allele pairs 
 // (Note that the letters used to represent alleles are not completely standardized and may be different in some textbooks and other sources.)
 export const genes : { [key: string]: string[] } = {
-  "White": ["WW", "WS", "Ww", "SS", "Ss", "ww"], 
+  "White": ["WDWD", "WDWh", "WDw", "WhWh", "WhWl", "Whw", "WlWl", "Wlw", "ww"], 
   "Orange": ["OO", "O", "Oo", "oo", "o"],
   "Brown": ["BB", "Bb", "Bbl", "bb", "bbl", "blbl"], 
   "Dilute": ["DD", "Dd", "dd"], 
@@ -217,14 +217,16 @@ export const genes : { [key: string]: string[] } = {
 }
 
 export const superscriptMappings : {[key: string]: string} = {
+  "ᴰ": "D",
   "ᵇ": "b",
-  "ˡ": "l", 
+  "ˡ": "l",
+  "ʰ": "h", 
   "ˢ": "s"
 }
 
 // Gene representation for UI. 
 export const genesFormatted : { [key: string]: string[] } = {
-  "White": ["W/W", "W/S", "W/w", "S/S", "S/s", "w/w"], 
+  "White": ["Wᴰ/Wᴰ", "Wᴰ/Wʰ", "Wᴰ/w", "Wʰ/Wʰ", "Wʰ/Wˡ", "Wʰ/w", "Wˡ/Wˡ", "Wˡ/w", "w/w"], 
   "Orange": ["O/O", "O", "O/o", "oo", "o"],
   "Brown": ["B/B", "B/b", "B/bˡ", "b/b", "b/bˡ", "bˡ/bˡ"], 
   "Dilute": ["D/D", "D/d", "d/d"], 
@@ -234,11 +236,14 @@ export const genesFormatted : { [key: string]: string[] } = {
 }
 
 export const genesRawToFormatted : { [key: string]: string } = {
-  "WW": "W/W", 
-  "WS": "W/S", 
-  "Ww": "W/w", 
-  "SS": "S/S", 
-  "Ss": "S/s", 
+  "WDWD": "Wᴰ/Wᴰ", 
+  "WDWh": "Wᴰ/Wʰ", 
+  "WDw": "Wᴰ/w", 
+  "WhWh": "Wʰ/Wʰ", 
+  "WhWl": "Wʰ/Wˡ", 
+  "Whw": "Wʰ/w", 
+  "WlWl": "Wˡ/Wˡ", 
+  "Wlw": "Wˡ/w",
   "ww": "w/w", 
   "OO": "O/O",
   "O": "O",
@@ -278,11 +283,14 @@ export const genesRawToFormatted : { [key: string]: string } = {
 export const alleleMappings : { [key: string]: string[] } = {
   "XX": ["X", "X"],
   "XY": ["X", "Y"],
-  "WW": ["W", "W"],
-  "WS": ["W", "S"],
-  "Ww": ["W", "w"],
-  "SS": ["S", "S"],
-  "Ss": ["S", "s"],
+  "WDWD": ["WD", "WD"], 
+  "WDWh": ["WD", "Wh"], 
+  "WDw": ["WD", "w"], 
+  "WhWh": ["Wh", "Wh"], 
+  "WhWl": ["Wh", "Wl"], 
+  "Whw": ["Wh", "w"], 
+  "WlWl": ["Wl", "Wl"], 
+  "Wlw": ["Wl", "w"],
   "ww": ["w", "w"],
   "OO": ["O", "O"],
   "Oo": ["O", "o"],
@@ -319,7 +327,7 @@ export const alleleMappings : { [key: string]: string[] } = {
 // Explanations to show the user what each gene does. The current ordering is intended to be the most intuitive for teaching the user how they interact. 
 // TODO: add rex and hairless
 export const tooltips : { [key: string]: string} = {
-  "White": "W/W, W/S, W/w cause dominant white, making the cat white regardless of other genes. S/S causes large white markings such as the van pattern, S/s causes smaller white markings such as tuxedo and often turns tortoiseshell into calico.",
+  "White": "One or more copies of Wᴰ produces a solid white cat regardless of other genes. In a cat without Wᴰ, one or more copies of Wʰ causes large white markings such as the van pattern, whereas Wˡ in the absence of Wᴰ and Wʰ causes small white markings. A w/w cat has no white markings.",
   "Orange": "O and O/O make the coat orange (formally called red) or cream except when dominant white is present. O/o causes tortoiseshell and calico fur. Since it is on the X chromosome, males can only have O or o, so all tortoiseshell and calico cats are either female or XXY.",
   "Brown": "b/b and b/bˡ cause chocolate coats, bˡ/bˡ causes cinnamon. B/B, B/b, B/bˡ cause black or gray coats unless Orange or White is present.",
   "Dilute": "D/D and D/d cause normal intensity of existing color. d/d lightens existing color. Turns black to gray (blue), orange (red) to cream, chocolate to lilac, cinnamon to fawn.",
@@ -341,11 +349,14 @@ export const dilutions : { [key: string]: string } = {
 
 // Maps allele pairs to the trait they cause (if not prevented by some other gene).
 export const geneMappings : { [key: string]: string } = {
-  "WW": "white", 
-  "Ww": "white",
-  "WS": "white", 
-  "SS": "bicolor", 
-  "Ss": "bicolor", 
+  "WDWD": "white", 
+  "WDWh": "white", 
+  "WDw": "white", 
+  "WhWh": "bicolor", 
+  "WhWl": "bicolor", 
+  "Whw": "bicolor", 
+  "WlWl": "bicolor", 
+  "Wlw": "bicolor",
   "O": "orange",
   "OO": "orange",
   "Oo": "tortoiseshell", 
@@ -370,8 +381,8 @@ export const geneMappings : { [key: string]: string } = {
 }
 
 export const traitMappings : { [key: string]: string[][]} = {
-  "white": [["W", "W"], ["W", "w"], ["W", "S"]],
-  "bicolor": [["S", "S"], ["S", "s"]],
+  "white": [["WD", "WD"], ["WD", "Wh"], ["WD", "Wl"], ["Wd", "w"]],
+  "bicolor": [["Wh", "Wh"], ["Wh", "Wl"], ["Wh", "w"], ["Wl", "Wl"], ["Wl", "w"]],
   "non-white": [["w", "w"]],
   "chocolate": [["b", "b"], ["b", "bl"]],
   "lilac": [["b", "b"], ["b", "bl"]],
